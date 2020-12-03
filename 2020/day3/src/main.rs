@@ -1,17 +1,14 @@
-use std::ops::Add;
+#[macro_use] extern crate impl_ops;
+use std::ops;
 
 struct Point {
     x: usize,
     y: usize,
 }
 
-impl Add for &Point {
-    type Output = Point;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self::Output { x: self.x + rhs.x, y: self.y + rhs.y }
-    }
-}
+impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point { x: a.x + b.x, y: a.x + b.x }});
+impl_op!(+= |a: &mut Point, b: Point| { *a = &*a + b });
+impl_op!(+= |a: &mut Point, b: &Point| { *a = &*a + b });
 
 struct TreeGrid {
     /// Vec of rows, each row being a vec of columns
@@ -65,7 +62,7 @@ fn main() {
                 if grid.has_tree_at(&current) {
                     total += 1;
                 }
-                current = &current + &slope;
+                current += slope;
             }
 
             total
