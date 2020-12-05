@@ -3,17 +3,6 @@ extern crate lazy_static;
 
 use regex::Regex;
 
-// enum PassportField {
-//     BirthYear(Option<String>),
-//     IssueYear(Option<String>),
-//     ExpirationYear(Option<String>),
-//     Height(Option<String>),
-//     HairColor(Option<String>),
-//     EyeColor(Option<String>),
-//     PassportID(Option<String>),
-//     CountryID(Option<String>),
-// }
-
 fn is_valid_year(year: &Option<String>, min: i32, max: i32) -> bool {
     if let Some(year) = year {
         if let Ok(parsed) = year.parse::<i32>() {
@@ -68,59 +57,6 @@ fn is_valid_id(id: &Option<String>) -> bool {
     id.as_ref().map_or(false, |id| RE.is_match(&id))
 }
 
-// impl PassportField {
-//     fn from_packed(packed: &str) -> Self {
-//         let mut split = packed.splitn(2, ":");
-//         let key = split.next().expect(packed);
-//         let value = Some(split.next().expect(packed).to_owned());
-//
-//         match key {
-//             "byr" => Self::BirthYear(value),
-//             "iyr" => Self::IssueYear(value),
-//             "eyr" => Self::ExpirationYear(value),
-//             "hgt" => Self::Height(value),
-//             "hcl" => Self::HairColor(value),
-//             "ecl" => Self::EyeColor(value),
-//             "pid" => Self::PassportID(value),
-//             "cid" => Self::CountryID(value),
-//             _ => panic!("Unknown key {}", key),
-//         }
-//     }
-//
-//     fn is_present_or_ignored(&self) -> bool {
-//         match self {
-//             PassportField::CountryID(..) => true,
-//             _ => self.0.is_some()
-//         }
-//     }
-//
-//     fn is_valid(&self) -> bool {
-//         match self {
-//             Self::BirthYear(Some(year)) => is_valid_year(year, 1920, 2002),
-//             Self::IssueYear(Some(year)) => is_valid_year(year, 2010, 2020),
-//             Self::ExpirationYear(Some(year)) => is_valid_year(year, 2020, 2030),
-//             Self::Height(Some(height)) => is_valid_height(height),
-//             Self::HairColor(Some(color)) => is_valid_hair_color(color),
-//             Self::EyeColor(Some(color)) => is_valid_eye_color(color),
-//             Self::PassportID(Some(id)) => is_valid_id(id),
-//             Self::CountryID( .. ) => true,
-//             _ => false,
-//         }
-//     }
-// }
-
-// #[derive(Default, Debug)]
-// struct Passport {
-//     birth_year: PassportField::BirthYear,
-//     issue_year: PassportField::IssueYear,
-//     expiration_year: PassportField::ExpirationYear,
-//     height: PassportField::Height,
-//     hair_color: PassportField::HairColor,
-//     eye_color: PassportField::EyeColor,
-//     passport_id: PassportField::PassportID,
-//     country_id: PassportField::CountryID,
-// }
-
 #[derive(Default, Debug)]
 struct Passport {
     birth_year: Option<String>,
@@ -156,20 +92,6 @@ impl Passport {
 
         passport
     }
-
-    // fn all_fields(&self) -> impl Iterator<Item=&PassportField> {
-    //     // TODO - Better way to make an iterator?
-    //     vec![
-    //         self.birth_year,
-    //         self.issue_year,
-    //         self.expiration_year,
-    //         self.height,
-    //         self.hair_color,
-    //         self.eye_color,
-    //         self.passport_id,
-    //         self.country_id,
-    //     ].iter()
-    // }
 
     fn is_valid_passport_pt1(&self) -> bool {
         self.birth_year.is_some() &&
