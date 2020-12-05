@@ -7,7 +7,7 @@ fn seat_to_id(seat: &str) -> u16 {
     u16::from_str_radix(&bin_str, 2).unwrap()
 }
 
-fn main() {
+pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 

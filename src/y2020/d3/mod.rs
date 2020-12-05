@@ -1,4 +1,3 @@
-#[macro_use] extern crate impl_ops;
 use std::ops;
 
 struct Point {
@@ -40,7 +39,7 @@ impl TreeGrid {
     }
 }
 
-fn main() {
+pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 

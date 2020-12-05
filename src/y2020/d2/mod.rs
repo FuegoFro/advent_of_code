@@ -1,7 +1,5 @@
-#[macro_use]
-extern crate lazy_static;
-use regex::Regex;
 use anyhow::Result;
+use regex::Regex;
 
 #[derive(Debug)]
 struct Password {
@@ -14,9 +12,9 @@ struct Password {
 impl Password {
     fn from_packed(packed: &str) -> Result<Self> {
         lazy_static! {
-            static ref RE: Regex = Regex::new(
-                r"^(?P<num_a>\d+)-(?P<num_b>\d+) (?P<char>[a-z]): (?P<content>[a-z]+)$"
-            ).unwrap();
+            static ref RE: Regex =
+                Regex::new(r"^(?P<num_a>\d+)-(?P<num_b>\d+) (?P<char>[a-z]): (?P<content>[a-z]+)$")
+                    .unwrap();
         }
         let caps = RE.captures(packed).expect(packed);
         Ok(Password {
@@ -40,7 +38,7 @@ impl Password {
     }
 }
 
-fn main() {
+pub fn main() {
     // let passwords = include_str!("example_passwords.txt").trim();
     let passwords = include_str!("target_passwords.txt").trim();
 

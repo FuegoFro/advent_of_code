@@ -2,12 +2,7 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/2020/day1/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/2020/day2/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/2020/day3/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/2020/day4/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/2019/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/2020/day5/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

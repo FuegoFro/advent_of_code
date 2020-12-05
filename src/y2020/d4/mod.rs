@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate lazy_static;
-
 use regex::Regex;
 
 fn is_valid_year(year: &Option<String>, min: i32, max: i32) -> bool {
@@ -105,7 +102,7 @@ impl Passport {
     }
 }
 
-fn main() {
+pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
