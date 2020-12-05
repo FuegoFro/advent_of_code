@@ -4,34 +4,27 @@ extern crate lazy_static;
 use regex::Regex;
 
 fn is_valid_year(year: &Option<String>, min: i32, max: i32) -> bool {
-    if let Some(year) = year {
-        if let Ok(parsed) = year.parse::<i32>() {
-            return year.len() == 4 && min <= parsed && parsed <= max;
-        }
-    }
-
-    false
+    year.as_ref()
+        .filter(|y| y.len() == 4)
+        .and_then(|y| y.parse::<i32>().ok())
+        .filter(|y| min <= *y && *y <= max)
+        .is_some()
 }
 
 fn is_valid_height(height: &Option<String>) -> bool {
-    let height = if let Some(height) = height {
-        height
-    } else {
-        return false;
-    };
-
-    let (number, unit) = height.split_at(height.len() - 2);
-    let (min, max) = match unit {
-        "cm" => (150, 193),
-        "in" => (59, 76),
-        _ => return false,
-    };
-
-    if let Ok(parsed) = number.parse() {
-        min <= parsed && parsed <= max
-    } else {
-        false
-    }
+    height
+        .as_ref()
+        .map(|h| h.split_at(h.len() - 2))
+        // Parse the number part
+        .and_then(|(number, unit)| number.parse::<i32>().ok().map(|n| (n, unit)))
+        // Convert the unit to min/max
+        .and_then(|(number, unit)| match unit {
+            "cm" => Some((number, 150, 193)),
+            "in" => Some((number, 59, 76)),
+            _ => None,
+        })
+        .filter(|(number, min, max)| min <= number && number <= max)
+        .is_some()
 }
 
 fn is_valid_hair_color(color: &Option<String>) -> bool {
@@ -42,11 +35,9 @@ fn is_valid_hair_color(color: &Option<String>) -> bool {
 }
 
 fn is_valid_eye_color(color: &Option<String>) -> bool {
-    color.as_ref().map_or(false, |color| {
-        match color.as_ref() {
-            "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth" => true,
-            _ => false,
-        }
+    color.as_ref().map_or(false, |color| match color.as_ref() {
+        "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth" => true,
+        _ => false,
     })
 }
 
@@ -94,23 +85,23 @@ impl Passport {
     }
 
     fn is_valid_passport_pt1(&self) -> bool {
-        self.birth_year.is_some() &&
-            self.issue_year.is_some() &&
-            self.expiration_year.is_some() &&
-            self.height.is_some() &&
-            self.hair_color.is_some() &&
-            self.eye_color.is_some() &&
-            self.passport_id.is_some()
+        self.birth_year.is_some()
+            && self.issue_year.is_some()
+            && self.expiration_year.is_some()
+            && self.height.is_some()
+            && self.hair_color.is_some()
+            && self.eye_color.is_some()
+            && self.passport_id.is_some()
     }
 
     fn is_valid_passport_pt2(&self) -> bool {
-        is_valid_year(&self.birth_year, 1920, 2002) &&
-            is_valid_year(&self.issue_year, 2010, 2020) &&
-            is_valid_year(&self.expiration_year, 2020, 2030) &&
-            is_valid_height(&self.height) &&
-            is_valid_hair_color(&self.hair_color) &&
-            is_valid_eye_color(&self.eye_color) &&
-            is_valid_id(&self.passport_id)
+        is_valid_year(&self.birth_year, 1920, 2002)
+            && is_valid_year(&self.issue_year, 2010, 2020)
+            && is_valid_year(&self.expiration_year, 2020, 2030)
+            && is_valid_height(&self.height)
+            && is_valid_hair_color(&self.hair_color)
+            && is_valid_eye_color(&self.eye_color)
+            && is_valid_id(&self.passport_id)
     }
 }
 
