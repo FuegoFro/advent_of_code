@@ -5,7 +5,7 @@ struct Point {
     y: usize,
 }
 
-impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point { x: a.x + b.x, y: a.x + b.x }});
+impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point { x: a.x + b.x, y: a.y + b.y }});
 impl_op!(+= |a: &mut Point, b: Point| { *a = &*a + b });
 impl_op!(+= |a: &mut Point, b: &Point| { *a = &*a + b });
 
