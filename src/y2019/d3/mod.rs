@@ -1,21 +1,5 @@
+use crate::util::point::Point;
 use std::collections::{HashMap, HashSet};
-use std::ops;
-
-#[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point { x: a.x + b.x, y: a.y + b.y }});
-impl_op!(+= |a: &mut Point, b: Point| { *a = &*a + b });
-impl_op!(+= |a: &mut Point, b: &Point| { *a = &*a + b });
-
-impl Point {
-    fn l1_dist(&self) -> i32 {
-        self.x.abs() + self.y.abs()
-    }
-}
 
 fn visited_locations(path: &str) -> HashMap<Point, u32> {
     let mut locations = HashMap::new();
