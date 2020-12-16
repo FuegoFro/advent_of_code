@@ -112,6 +112,7 @@ mod seats {
                 .sum()
         }
 
+        #[allow(dead_code)]
         fn print_current(&self) {
             println!("current:");
             for row in self.current.iter() {

@@ -6,7 +6,7 @@ pub fn main() {
     let input = include_str!("actual_input.txt").trim();
     let buffer = 25;
 
-    let mut numbers = input
+    let numbers = input
         .split("\n")
         .map(|l| l.parse::<i64>().unwrap())
         .collect::<Vec<_>>();

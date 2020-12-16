@@ -25,6 +25,7 @@ impl Password {
         })
     }
 
+    #[allow(dead_code)]
     fn is_valid_old(&self) -> bool {
         let num_char = self.content.chars().filter(|c| *c == self.char).count();
         self.num_a <= num_char && num_char <= self.num_b

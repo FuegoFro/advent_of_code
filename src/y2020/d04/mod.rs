@@ -81,6 +81,7 @@ impl Passport {
         passport
     }
 
+    #[allow(dead_code)]
     fn is_valid_passport_pt1(&self) -> bool {
         self.birth_year.is_some()
             && self.issue_year.is_some()
