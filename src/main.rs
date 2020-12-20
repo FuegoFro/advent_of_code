@@ -2,6 +2,8 @@
 extern crate impl_ops;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate lalrpop_util;
 
 use structopt::StructOpt;
 
@@ -14,7 +16,7 @@ mod y2020;
 struct Opt {
     #[structopt(default_value = "2020")]
     year: u32,
-    #[structopt(default_value = "17")]
+    #[structopt(default_value = "19")]
     day: u32,
 }
 
@@ -39,6 +41,8 @@ fn main() {
             15 => y2020::d15::main(),
             16 => y2020::d16::main(),
             17 => y2020::d17::main(),
+            18 => y2020::d18::main(),
+            19 => y2020::d19::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         2019 => match opt.day {

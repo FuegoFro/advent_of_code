@@ -3,6 +3,7 @@ name = "aoc"
 version = "0.1.0"
 authors = ["Danny Weinberg <FuegoFro@gmail.com>"]
 edition = "2018"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -16,3 +17,7 @@ lazy_static = "1"
 anyhow = "1"
 impl_ops = "0.1"
 itertools = "0.9"
+lalrpop-util = "0.19"
+
+[build-dependencies]
+lalrpop = { version = "0.19", features = ["lexer"] }
