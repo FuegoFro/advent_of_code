@@ -46,9 +46,9 @@ fn main() {
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         2019 => match opt.day {
-            1 => y2019::d1::main(),
-            2 => y2019::d2::main(),
-            3 => y2019::d3::main(),
+            1 => y2019::d01::main(),
+            2 => y2019::d02::main(),
+            3 => y2019::d03::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         _ => println!("Unknown year {}", opt.year),
