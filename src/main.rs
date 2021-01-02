@@ -16,7 +16,7 @@ mod y2020;
 struct Opt {
     #[structopt(default_value = "2019")]
     year: u32,
-    #[structopt(default_value = "4")]
+    #[structopt(default_value = "7")]
     day: u32,
 }
 
@@ -51,6 +51,9 @@ fn main() {
             2 => y2019::d02::main(),
             3 => y2019::d03::main(),
             4 => y2019::d04::main(),
+            5 => y2019::d05::main(),
+            6 => y2019::d06::main(),
+            7 => y2019::d07::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         _ => println!("Unknown year {}", opt.year),
