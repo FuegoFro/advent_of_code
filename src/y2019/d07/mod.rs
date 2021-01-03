@@ -1,4 +1,4 @@
-use crate::y2019::computer::{Computer, ComputerExitStatus};
+use crate::y2019::computer::{Computer, ComputerExitStatus, Word};
 use itertools::Itertools;
 use std::cmp::max;
 
@@ -11,7 +11,7 @@ pub fn main() {
 }
 
 fn pt1(input: &str) {
-    let mut max_value = i32::min_value();
+    let mut max_value = Word::min_value();
     for phases in vec![0, 1, 2, 3, 4].into_iter().permutations(5) {
         let mut value = 0;
         for phase in phases {
@@ -28,7 +28,7 @@ fn pt1(input: &str) {
 }
 
 fn pt2(input: &str) {
-    let mut max_value = i32::min_value();
+    let mut max_value = Word::min_value();
     for phases in vec![5, 6, 7, 8, 9].into_iter().permutations(5) {
         let mut computers = phases
             .iter()
@@ -39,7 +39,6 @@ fn pt2(input: &str) {
             })
             .collect_vec();
 
-        // let mut values = &INITIAL_VALUES;
         let mut values = vec![0];
         let mut most_recent_status: Option<ComputerExitStatus> = None;
         while most_recent_status != Some(ComputerExitStatus::Finished) {

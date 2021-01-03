@@ -7,10 +7,22 @@ pub struct Point {
 }
 
 impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point { x: a.x + b.x, y: a.y + b.y }});
+impl_op_ex!(-|a: &Point, b: &Point| -> Point {
+    Point {
+        x: a.x - b.x,
+        y: a.y - b.y,
+    }
+});
 impl_op_ex!(*|a: &Point, b: i32| -> Point {
     Point {
         x: a.x * b,
         y: a.y * b,
+    }
+});
+impl_op_ex!(/|a: &Point, b: i32| -> Point {
+    Point {
+        x: a.x / b,
+        y: a.y / b,
     }
 });
 impl_op_ex!(*|a: &Point, b: u32| -> Point {
@@ -49,5 +61,9 @@ impl Point {
             x: self.x * cos - self.y * sin,
             y: self.x * sin + self.y * cos,
         }
+    }
+
+    pub fn atan2(&self) -> f64 {
+        (self.y as f64).atan2(self.x as f64)
     }
 }
