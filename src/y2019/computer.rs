@@ -250,9 +250,8 @@ impl Computer {
         }
     }
 
-    pub fn fixup(&mut self, noun: Word, verb: Word) {
-        self.memory.write(1, noun);
-        self.memory.write(2, verb);
+    pub fn write_memory(&mut self, position: usize, value: Word) {
+        self.memory.write(position, value);
     }
 
     fn decompose_op_code(mut raw_op_code: Word) -> (u8, Vec<ParameterMode>) {

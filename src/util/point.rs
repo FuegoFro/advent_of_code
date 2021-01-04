@@ -1,3 +1,4 @@
+use itertools::{Itertools, MinMaxResult};
 use std::ops;
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
@@ -40,7 +41,7 @@ impl Point {
     pub const LEFT: Point = Point { x: -1, y: 0 };
     pub const RIGHT: Point = Point { x: 1, y: 0 };
 
-    pub fn new(x: i32, y: i32) -> Point {
+    pub const fn new(x: i32, y: i32) -> Point {
         Point { x, y }
     }
 
@@ -48,6 +49,7 @@ impl Point {
         self.x.abs() + self.y.abs()
     }
 
+    /// Returns a new point that has been rotate counter clockwise by the given degrees.
     pub fn rotate_about_origin_deg(&self, deg: u32) -> Point {
         let deg_mod = ((deg % 360) + 360) % 360;
         let (sin, cos) = match deg_mod {
@@ -66,4 +68,18 @@ impl Point {
     pub fn atan2(&self) -> f64 {
         (self.y as f64).atan2(self.x as f64)
     }
+}
+
+pub fn get_bounding_box(points: Vec<&Point>) -> (Point, Point) {
+    let (min_x, max_x) = match points.iter().map(|p| p.x).minmax() {
+        MinMaxResult::NoElements => panic!("Expected some elements"),
+        MinMaxResult::OneElement(e) => (e, e),
+        MinMaxResult::MinMax(l, h) => (l, h),
+    };
+    let (min_y, may_y) = match points.iter().map(|p| p.y).minmax() {
+        MinMaxResult::NoElements => panic!("Expected some elements"),
+        MinMaxResult::OneElement(e) => (e, e),
+        MinMaxResult::MinMax(l, h) => (l, h),
+    };
+    (Point::new(min_x, min_y), Point::new(max_x, may_y))
 }
