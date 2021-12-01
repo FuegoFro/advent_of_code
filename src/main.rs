@@ -10,19 +10,36 @@ use structopt::StructOpt;
 mod util;
 mod y2019;
 mod y2020;
+mod y2021;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Main")]
 struct Opt {
-    #[structopt(default_value = "2019")]
+    #[structopt(default_value = "2021")]
     year: u32,
-    #[structopt(default_value = "13")]
+    #[structopt(default_value = "1")]
     day: u32,
 }
 
 fn main() {
     let opt = Opt::from_args();
     match opt.year {
+        2019 => match opt.day {
+            1 => y2019::d01::main(),
+            2 => y2019::d02::main(),
+            3 => y2019::d03::main(),
+            4 => y2019::d04::main(),
+            5 => y2019::d05::main(),
+            6 => y2019::d06::main(),
+            7 => y2019::d07::main(),
+            8 => y2019::d08::main(),
+            9 => y2019::d09::main(),
+            10 => y2019::d10::main(),
+            11 => y2019::d11::main(),
+            12 => y2019::d12::main(),
+            13 => y2019::d13::main(),
+            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        },
         2020 => match opt.day {
             1 => y2020::d01::main(),
             2 => y2020::d02::main(),
@@ -46,20 +63,8 @@ fn main() {
             20 => y2020::d20::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
-        2019 => match opt.day {
-            1 => y2019::d01::main(),
-            2 => y2019::d02::main(),
-            3 => y2019::d03::main(),
-            4 => y2019::d04::main(),
-            5 => y2019::d05::main(),
-            6 => y2019::d06::main(),
-            7 => y2019::d07::main(),
-            8 => y2019::d08::main(),
-            9 => y2019::d09::main(),
-            10 => y2019::d10::main(),
-            11 => y2019::d11::main(),
-            12 => y2019::d12::main(),
-            13 => y2019::d13::main(),
+        2021 => match opt.day {
+            1 => y2021::d01::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         _ => println!("Unknown year {}", opt.year),
