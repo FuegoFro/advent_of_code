@@ -29,6 +29,7 @@ name = "aoc"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "binary-search",
  "impl_ops",
  "itertools",
  "lalrpop",
@@ -84,6 +85,12 @@ name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
+
+[[package]]
+name = "binary-search"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0535de07a3d29c27ca1e63f36dd0b77adca4136795c38b1b4be5f1c10193368e"
 
 [[package]]
 name = "bit-set"

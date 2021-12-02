@@ -1,10 +1,6 @@
+use crate::util::split_once;
 use itertools::Itertools;
 use std::collections::{HashSet, VecDeque};
-
-fn split_once<'a>(s: &'a str, delim: &str) -> (&'a str, &'a str) {
-    let mut split = s.splitn(2, delim);
-    (split.next().unwrap(), split.next().unwrap())
-}
 
 const EMPTY_VEC: Vec<&str> = Vec::new();
 

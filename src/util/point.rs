@@ -34,8 +34,11 @@ impl_op_ex!(*|a: &Point, b: u32| -> Point {
 });
 impl_op!(+= |a: &mut Point, b: Point| { *a = &*a + b });
 impl_op!(+= |a: &mut Point, b: &Point| { *a = &*a + b });
+impl_op!(-= |a: &mut Point, b: Point| { *a = &*a - b });
+impl_op!(-= |a: &mut Point, b: &Point| { *a = &*a - b });
 
 impl Point {
+    pub const ORIGIN: Point = Point { x: 0, y: 0 };
     pub const UP: Point = Point { x: 0, y: 1 };
     pub const DOWN: Point = Point { x: 0, y: -1 };
     pub const LEFT: Point = Point { x: -1, y: 0 };

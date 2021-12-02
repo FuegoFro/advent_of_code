@@ -198,6 +198,15 @@ impl ComputerExitStatus {
             _ => panic!("Expected status to be Finished, actually got: {:?}", self),
         }
     }
+    pub fn assert_waiting_for_input(&self) {
+        match self {
+            ComputerExitStatus::WaitingForInput => {}
+            _ => panic!(
+                "Expected status to be WaitingForInput, actually got: {:?}",
+                self
+            ),
+        }
+    }
 }
 
 struct Memory {

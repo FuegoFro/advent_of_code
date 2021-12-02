@@ -18,3 +18,8 @@ pub fn p_i32(s: &str) -> i32 {
 pub fn p_i64(s: &str) -> i64 {
     s.parse().expect(s)
 }
+
+pub fn split_once<'a>(s: &'a str, delim: &str) -> (&'a str, &'a str) {
+    let mut split = s.splitn(2, delim);
+    (split.next().unwrap(), split.next().unwrap())
+}
