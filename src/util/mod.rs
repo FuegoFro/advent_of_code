@@ -5,6 +5,10 @@ pub fn p_u32(s: &str) -> u32 {
     s.parse().expect(s)
 }
 
+pub fn p_u32c(c: char) -> u32 {
+    c.to_digit(10).expect(&format!("-->{}<--", c))
+}
+
 pub fn p_u64(s: &str) -> u64 {
     s.parse().expect(s)
 }
