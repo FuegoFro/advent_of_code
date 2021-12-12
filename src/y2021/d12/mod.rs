@@ -80,8 +80,7 @@ pub fn main() {
         .split("\n")
         .map(|line| line.split_once("-").unwrap())
         // Expand with both forwards and backwards links
-        // TODO - Turn this to just `.into_iter()` once using 2021 Edition.
-        .flat_map(|(a, b)| IntoIterator::into_iter([(a, b), (b, a)]))
+        .flat_map(|(a, b)| [(a, b), (b, a)].into_iter())
         .into_group_map();
 
     let num_paths = dfs_all_paths(&graph, false);
