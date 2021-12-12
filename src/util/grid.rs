@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use std::fmt::{Debug, Formatter};
+use std::fmt::{Debug, Formatter, Write};
 use std::ops::{Index, IndexMut};
 
 use itertools::Itertools;
@@ -106,26 +106,35 @@ impl<T> Grid<T> {
     }
 }
 
-impl<T> Debug for Grid<T> {
+impl<T: ToString> Debug for Grid<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        todo!()
-        /*
-        fn print_grid(grid: &Vec<Vec<u32>>) {
-            println!(
-                "{}",
-                grid.iter()
-                    .map(|r| r
-                        .iter()
-                        .map(|v| if *v > 9 {
-                            "x".to_string()
-                        } else {
-                            v.to_string()
-                        })
-                        .join(""))
-                    .join("\n")
-            );
+        let strs = self
+            .storage
+            .iter()
+            .map(|row| row.iter().map(|v| v.to_string()).collect_vec())
+            .collect_vec();
+
+        let longest = strs
+            .iter()
+            .flat_map(|row| row.iter())
+            .map(|v| v.len())
+            .max()
+            .unwrap_or(0);
+
+        let mut final_string = String::new();
+        for row in strs {
+            final_string.write_str("  ")?;
+            for (i, v) in row.into_iter().enumerate() {
+                if i != 0 {
+                    final_string.push(' ')
+                }
+                final_string.write_fmt(format_args!("{:>width$}", v, width = longest))?;
+            }
+            final_string.push('\n');
         }
-        */
+        f.debug_struct("Grid")
+            .field("storage", &format_args!("\n{}", final_string))
+            .finish()
     }
 }
 
