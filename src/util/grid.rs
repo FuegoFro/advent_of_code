@@ -20,6 +20,15 @@ pub enum Neighbors {
 }
 
 impl<T> Grid<T> {
+    pub fn from_storage(storage: Vec<Vec<T>>) -> Self {
+        Grid {
+            // Assumes equal-length rows
+            height: storage.len(),
+            width: storage.get(0).map_or(0, |row| row.len()),
+            storage,
+        }
+    }
+
     pub fn from_str(
         raw: impl AsRef<str>,
         row_delimiter: &str,

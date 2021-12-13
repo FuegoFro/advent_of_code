@@ -73,16 +73,17 @@ impl Point {
     }
 }
 
-pub fn get_bounding_box(points: Vec<&Point>) -> (Point, Point) {
-    let (min_x, max_x) = match points.iter().map(|p| p.x).minmax() {
+fn min_max(vals: Vec<i32>) -> (i32, i32) {
+    match vals.into_iter().minmax() {
         MinMaxResult::NoElements => panic!("Expected some elements"),
         MinMaxResult::OneElement(e) => (e, e),
         MinMaxResult::MinMax(l, h) => (l, h),
-    };
-    let (min_y, may_y) = match points.iter().map(|p| p.y).minmax() {
-        MinMaxResult::NoElements => panic!("Expected some elements"),
-        MinMaxResult::OneElement(e) => (e, e),
-        MinMaxResult::MinMax(l, h) => (l, h),
-    };
+    }
+}
+
+pub fn get_bounding_box<'a>(points: impl Iterator<Item = &'a Point>) -> (Point, Point) {
+    let (xs, ys): (Vec<_>, Vec<_>) = points.map(|p| (p.x, p.y)).unzip();
+    let (min_x, max_x) = min_max(xs);
+    let (min_y, may_y) = min_max(ys);
     (Point::new(min_x, min_y), Point::new(max_x, may_y))
 }

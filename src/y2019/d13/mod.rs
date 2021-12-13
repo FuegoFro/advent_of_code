@@ -1,9 +1,11 @@
-use crate::util::point::{get_bounding_box, Point};
-use crate::y2019::computer::{Computer, ComputerExitStatus, Word};
+use std::cmp::Ordering;
+
 use itertools::Either;
 use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
-use std::cmp::Ordering;
+
+use crate::util::point::{get_bounding_box, Point};
+use crate::y2019::computer::{Computer, ComputerExitStatus, Word};
 
 #[derive(FromPrimitive, Clone, Eq, PartialEq)]
 enum Tile {
@@ -113,8 +115,7 @@ pub fn main() {
         .filter(|di| di.value == Either::Left(Tile::Block))
         .count();
     println!("{}", num_blocks);
-    let (origin, outer_edge) =
-        get_bounding_box(draw_instructions.iter().map(|di| &di.coordinate).collect());
+    let (origin, outer_edge) = get_bounding_box(draw_instructions.iter().map(|di| &di.coordinate));
     assert_eq!(origin, Point::new(0, 0));
     let outer_edge = outer_edge + Point::new(1, 1);
     let mut screen = vec![vec![Tile::Empty; outer_edge.x as usize]; outer_edge.y as usize];

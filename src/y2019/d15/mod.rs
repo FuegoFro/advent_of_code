@@ -50,7 +50,7 @@ impl Robot {
     }
 
     fn render_map(&self) {
-        let (l, u) = get_bounding_box(self.map.keys().collect_vec());
+        let (l, u) = get_bounding_box(self.map.keys());
         for y in (l.y..=u.y).rev() {
             for x in l.x..=u.x {
                 let current = Point::new(x, y);
