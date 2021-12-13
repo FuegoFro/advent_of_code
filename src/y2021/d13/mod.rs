@@ -2,15 +2,22 @@ use crate::util::grid::Grid;
 use crate::util::p_i32;
 use crate::util::point::{get_bounding_box, Point};
 use itertools::Itertools;
+use recap::Recap;
+use serde::Deserialize;
 use std::cmp::min;
 use std::collections::HashSet;
 use tuple::Map;
 
+#[derive(Deserialize)]
 enum FoldAxis {
+    #[serde(alias = "x")]
     X,
+    #[serde(alias = "y")]
     Y,
 }
 
+#[derive(Deserialize, Recap)]
+#[recap(regex = r"fold along (?P<axis>.)=(?P<distance>\d+)")]
 struct Fold {
     axis: FoldAxis,
     distance: i32,
@@ -18,16 +25,7 @@ struct Fold {
 
 impl Fold {
     fn from_str(s: &str) -> Self {
-        assert!(s.starts_with("fold along "));
-        let (first_half, distance) = s.split_once("=").unwrap();
-        Fold {
-            axis: match first_half.chars().last().unwrap() {
-                'x' => FoldAxis::X,
-                'y' => FoldAxis::Y,
-                _ => panic!(),
-            },
-            distance: p_i32(distance),
-        }
+        s.parse().unwrap()
     }
 
     fn update(&self, mut point: Point) -> Point {
@@ -48,7 +46,6 @@ impl Fold {
 }
 
 fn fold_points(mut points: HashSet<Point>, folds: &Vec<Fold>) -> HashSet<Point> {
-    // print_points(&points);
     for fold in folds {
         points = fold_once(points, fold);
     }
@@ -70,8 +67,7 @@ fn print_points(points: &HashSet<Point>) {
         .map(|y| {
             (0..=max_point.x)
                 .map(|x| {
-                    let p = Point::new(x, y);
-                    if points.contains(&p) {
+                    if points.contains(&Point::new(x, y)) {
                         '#'
                     } else {
                         '.'
