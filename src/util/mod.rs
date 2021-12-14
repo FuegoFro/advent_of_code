@@ -1,6 +1,7 @@
 pub mod point;
 pub mod point2;
 pub mod grid;
+pub mod iter_helpers;
 
 #[allow(dead_code)]
 pub fn p_u32(s: &str) -> u32 {
