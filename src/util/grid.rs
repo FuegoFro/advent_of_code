@@ -19,6 +19,18 @@ pub enum Neighbors {
     Eight,
 }
 
+impl<T> Grid<T>
+where
+    T: Default,
+{
+    pub fn empty(width: usize, height: usize) -> Self {
+        let storage = (0..height)
+            .map(|_| (0..width).map(|_| Default::default()).collect_vec())
+            .collect_vec();
+        Self::from_storage(storage)
+    }
+}
+
 impl<T> Grid<T> {
     pub fn from_storage(storage: Vec<Vec<T>>) -> Self {
         Grid {
@@ -62,6 +74,14 @@ impl<T> Grid<T> {
         }
     }
 
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
+    pub fn height(&self) -> usize {
+        self.height
+    }
+
     pub fn points(&self) -> impl Iterator<Item = PointU> {
         // Assumes even-length rows
         let height = self.height;
@@ -74,15 +94,8 @@ impl<T> Grid<T> {
         point: PointU,
         neighbors: Neighbors,
     ) -> impl Iterator<Item = (PointU, &T)> {
-        match neighbors {
-            Neighbors::Four => &Delta::NEIGHBORS4[..],
-            Neighbors::Eight => &Delta::NEIGHBORS8[..],
-        }
-        .iter()
-        .map(move |delta| {
-            let neighbor_point = point + delta;
-            (neighbor_point, &self[neighbor_point])
-        })
+        self.neighbors(point, neighbors)
+            .map(|neighbor_point| (neighbor_point, &self[neighbor_point]))
     }
 
     pub fn neighbors(&self, point: PointU, neighbors: Neighbors) -> impl Iterator<Item = PointU> {
