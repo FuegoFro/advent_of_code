@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // # Operations needed
 // ## Explode
 //  - Modify left/right (traversing upward)
@@ -84,22 +85,6 @@ impl ExplodeResult {
     }
 }
 
-#[derive(Debug)]
-enum SplitResult {
-    SplitParent { value: u32 },
-    DidWork,
-    None,
-}
-
-impl SplitResult {
-    fn did_work(&self) -> bool {
-        match self {
-            Self::None => false,
-            _ => true,
-        }
-    }
-}
-
 fn parse(s: &str) -> Node {
     // println!("Parsing {}", s);
     match parse_inner(s).1 {
@@ -166,7 +151,7 @@ fn explode(node: &mut Node, level: usize) -> ExplodeResult {
 fn explode_side(node: &mut Node, level: usize, side_direction: Direction) -> ExplodeResult {
     let result = match side_direction.get_value_mut(node) {
         NodeValue::SubNode(sub_node) => explode(sub_node, level + 1),
-        NodeValue::Value(v) => ExplodeResult::None,
+        NodeValue::Value(_) => ExplodeResult::None,
     };
     match result {
         ExplodeResult::ExplodeParent {
@@ -223,39 +208,31 @@ fn traverse_down(node_value: &mut NodeValue, to_add: u32, direction: Direction) 
     }
 }
 
-fn split(node: &mut Node) -> SplitResult {
-    let left_result = split_side(node, Direction::Left);
-    if left_result.did_work() {
-        return left_result;
-    }
-
-    split_side(node, Direction::Right)
+fn split(node: &mut Node) -> bool {
+    split_side(node, Direction::Left) || split_side(node, Direction::Right)
 }
 
-fn split_side(node: &mut Node, side_direction: Direction) -> SplitResult {
+fn split_side(node: &mut Node, side_direction: Direction) -> bool {
     let result = match side_direction.get_value_mut(node) {
-        NodeValue::SubNode(sub_node) => split(sub_node),
+        NodeValue::SubNode(sub_node) => return split(sub_node),
         NodeValue::Value(v) => {
             if *v >= 10 {
-                SplitResult::SplitParent { value: *v }
+                Some(*v)
             } else {
-                SplitResult::None
+                None
             }
         }
     };
     match result {
-        SplitResult::SplitParent { value } => {
+        Some(value) => {
             let odd_offset = if value.is_odd() { 1 } else { 0 };
             *side_direction.get_value_mut(node) = NodeValue::SubNode(Box::new(Node {
                 left: NodeValue::Value(value / 2),
                 right: NodeValue::Value(value / 2 + odd_offset),
             }));
-            SplitResult::DidWork
+            true
         }
-        // Propagate up the "stop now"
-        SplitResult::DidWork => SplitResult::DidWork,
-        // Keep going
-        SplitResult::None => SplitResult::None,
+        None => false,
     }
 }
 
@@ -272,10 +249,9 @@ fn get_magnitude_value(node_value: &NodeValue) -> u32 {
 
 fn reduce(node: &mut Node) -> bool {
     // Rely on short circuiting
-    explode(node, 0).did_work() || split(node).did_work()
+    explode(node, 0).did_work() || split(node)
 }
 
-#[allow(dead_code)]
 fn test(s: &str, expected: &str) {
     let mut number = parse(s);
     let expected = parse(expected);
@@ -350,25 +326,11 @@ pub fn main() {
     //     "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]",
     // );
 
-    let mut numbers = input.split("\n").map(parse).collect_vec();
+    let numbers = input.split("\n").map(parse).collect_vec();
     let mut part1 = numbers.clone();
     let mut result = part1.remove(0);
     for number in part1 {
         result = add(&result, &number);
-        // // println!("Current result {:?}", result);
-        // // println!("Adding {:?}", number);
-        // result = Node {
-        //     left: NodeValue::SubNode(Box::new(result)),
-        //     right: NodeValue::SubNode(Box::new(number)),
-        // };
-        // let mut repr = format!("{:?}", result);
-        // // println!("    Reducing {:?}", result);
-        // while reduce(&mut result) {
-        //     let new_repr = format!("{:?}", result);
-        //     // print_diff(&repr, &new_repr);
-        //     // println!("    Reducing {:?}", result);
-        //     repr = new_repr;
-        // }
     }
     println!("Final result: {:?}", result);
 
