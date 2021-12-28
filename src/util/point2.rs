@@ -1,3 +1,4 @@
+use itertools::{Itertools, MinMaxResult};
 use std::ops;
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
@@ -28,6 +29,17 @@ impl Delta {
         Delta::DOWN,
         Delta::DOWN_RIGHT,
     ];
+    pub const NEIGHBORS9: [Delta; 9] = [
+        Delta::UP_LEFT,
+        Delta::UP,
+        Delta::UP_RIGHT,
+        Delta::LEFT,
+        Delta::NONE,
+        Delta::RIGHT,
+        Delta::DOWN_LEFT,
+        Delta::DOWN,
+        Delta::DOWN_RIGHT,
+    ];
 
     pub const fn new(dx: i32, dy: i32) -> Self {
         Delta { dx, dy }
@@ -48,6 +60,13 @@ impl PointS {
 
     pub const fn new(x: i32, y: i32) -> PointS {
         PointS { x, y }
+    }
+
+    pub fn get_bounding_box<'a>(points: impl Iterator<Item = &'a PointS>) -> (PointS, PointS) {
+        let (xs, ys): (Vec<_>, Vec<_>) = points.map(|p| (p.x, p.y)).unzip();
+        let (min_x, max_x) = min_max(xs);
+        let (min_y, may_y) = min_max(ys);
+        (PointS::new(min_x, min_y), PointS::new(max_x, may_y))
     }
 }
 
@@ -80,6 +99,14 @@ impl_op!(+= |a: &mut PointS, b: Delta| { *a = &*a + b });
 impl_op!(+= |a: &mut PointS, b: &Delta| { *a = &*a + b });
 impl_op!(-= |a: &mut PointS, b: Delta| { *a = &*a - b });
 impl_op!(-= |a: &mut PointS, b: &Delta| { *a = &*a - b });
+
+fn min_max(vals: Vec<i32>) -> (i32, i32) {
+    match vals.into_iter().minmax() {
+        MinMaxResult::NoElements => panic!("Expected some elements"),
+        MinMaxResult::OneElement(e) => (e, e),
+        MinMaxResult::MinMax(l, h) => (l, h),
+    }
+}
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
 pub struct PointU {
