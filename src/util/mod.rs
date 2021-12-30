@@ -1,3 +1,5 @@
+use itertools::{Itertools, MinMaxResult};
+
 pub mod grid;
 pub mod iter_helpers;
 pub mod point;
@@ -30,4 +32,12 @@ pub fn p_i64(s: &str) -> i64 {
 pub fn split_once<'a>(s: &'a str, delim: &str) -> (&'a str, &'a str) {
     let mut split = s.splitn(2, delim);
     (split.next().unwrap(), split.next().unwrap())
+}
+
+pub fn min_max(vals: Vec<i32>) -> (i32, i32) {
+    match vals.into_iter().minmax() {
+        MinMaxResult::NoElements => panic!("Expected some elements"),
+        MinMaxResult::OneElement(e) => (e, e),
+        MinMaxResult::MinMax(l, h) => (l, h),
+    }
 }

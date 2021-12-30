@@ -1,3 +1,6 @@
+#![feature(array_zip)]
+#![feature(array_methods)]
+
 #[macro_use]
 extern crate impl_ops;
 #[macro_use]
@@ -17,7 +20,7 @@ mod y2021;
 struct Opt {
     #[structopt(default_value = "2021")]
     year: u32,
-    #[structopt(default_value = "21")]
+    #[structopt(default_value = "22")]
     day: u32,
 }
 
@@ -88,6 +91,7 @@ fn main() {
             19 => y2021::d19::main(),
             20 => y2021::d20::main(),
             21 => y2021::d21::main(),
+            22 => y2021::d22::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         _ => println!("Unknown year {}", opt.year),

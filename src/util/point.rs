@@ -1,4 +1,4 @@
-use itertools::{Itertools, MinMaxResult};
+use crate::util::min_max;
 use std::ops;
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
@@ -70,14 +70,6 @@ impl Point {
 
     pub fn atan2(&self) -> f64 {
         (self.y as f64).atan2(self.x as f64)
-    }
-}
-
-fn min_max(vals: Vec<i32>) -> (i32, i32) {
-    match vals.into_iter().minmax() {
-        MinMaxResult::NoElements => panic!("Expected some elements"),
-        MinMaxResult::OneElement(e) => (e, e),
-        MinMaxResult::MinMax(l, h) => (l, h),
     }
 }
 
