@@ -124,7 +124,7 @@ impl OctTreeNode {
         //     println!("  {:?},", section);
         // }
         // println!("];",);
-        for (idx, (modification, (bound, value))) in sections_and_mods.into_iter().enumerate() {
+        for (_, (modification, (bound, value))) in sections_and_mods.into_iter().enumerate() {
             if modification.bound.is_empty() {
                 continue;
             }
