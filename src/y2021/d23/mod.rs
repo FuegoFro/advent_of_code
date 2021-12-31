@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::fmt::{Debug, Formatter, Write};
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 enum PodType {
     A,
     B,
@@ -65,18 +65,17 @@ impl Debug for Occupant {
 
 #[derive(Copy, Clone)]
 struct Room {
-    front: usize,
-    back: usize,
+    positions: [usize; 4],
 }
 
 impl Room {
-    const A: Room = Room::new(7, 8);
-    const B: Room = Room::new(9, 10);
-    const C: Room = Room::new(11, 12);
-    const D: Room = Room::new(13, 14);
+    const A: Room = Room::new([7, 11, 15, 19]);
+    const B: Room = Room::new([8, 12, 16, 20]);
+    const C: Room = Room::new([9, 13, 17, 21]);
+    const D: Room = Room::new([10, 14, 18, 22]);
 
-    const fn new(front: usize, back: usize) -> Self {
-        Room { front, back }
+    const fn new(positions: [usize; 4]) -> Self {
+        Room { positions }
     }
 }
 
@@ -118,27 +117,38 @@ impl PartialOrd for Board {
   #########
 
  01 2 3 4 56
-   7 9 1 3
-   8 0 2 4
+   7 8 9 0
+   1 2 3 4
+   5 6 7 8
+   9 0 1 2
+
 
 */
 lazy_static! {
     static ref BOARD_NEIGHBORS: HashMap<usize, Vec<usize>> = [
         (0, vec![1]),
         (1, vec![0, 2, 7]),
-        (2, vec![1, 3, 7, 9]),
-        (3, vec![2, 4, 9, 11]),
-        (4, vec![3, 5, 11, 13]),
-        (5, vec![4, 6, 13]),
+        (2, vec![1, 3, 7, 8]),
+        (3, vec![2, 4, 8, 9]),
+        (4, vec![3, 5, 9, 10]),
+        (5, vec![4, 6, 10]),
         (6, vec![5]),
-        (7, vec![1, 2, 8]),
-        (8, vec![7]),
-        (9, vec![2, 3, 10]),
-        (10, vec![9]),
-        (11, vec![3, 4, 12]),
-        (12, vec![11]),
-        (13, vec![4, 5, 14]),
-        (14, vec![13]),
+        (7, vec![1, 2, 11]),
+        (8, vec![2, 3, 12]),
+        (9, vec![3, 4, 13]),
+        (10, vec![4, 5, 14]),
+        (11, vec![7, 15]),
+        (12, vec![8, 16]),
+        (13, vec![9, 17]),
+        (14, vec![10, 18]),
+        (15, vec![11, 19]),
+        (16, vec![12, 20]),
+        (17, vec![13, 21]),
+        (18, vec![14, 22]),
+        (19, vec![15]),
+        (20, vec![16]),
+        (21, vec![17]),
+        (22, vec![18]),
     ]
     .into_iter()
     .collect();
@@ -151,16 +161,24 @@ lazy_static! {
         Occupant::Empty,
         Occupant::Empty,
         Occupant::Pod(PodType::A),
-        Occupant::Pod(PodType::A),
         Occupant::Pod(PodType::B),
-        Occupant::Pod(PodType::B),
-        Occupant::Pod(PodType::C),
         Occupant::Pod(PodType::C),
         Occupant::Pod(PodType::D),
+        Occupant::Pod(PodType::A),
+        Occupant::Pod(PodType::B),
+        Occupant::Pod(PodType::C),
+        Occupant::Pod(PodType::D),
+        Occupant::Pod(PodType::A),
+        Occupant::Pod(PodType::B),
+        Occupant::Pod(PodType::C),
+        Occupant::Pod(PodType::D),
+        Occupant::Pod(PodType::A),
+        Occupant::Pod(PodType::B),
+        Occupant::Pod(PodType::C),
         Occupant::Pod(PodType::D),
     ];
     static ref BOARD_DOUBLE_LEN_HOPS: HashSet<usize> =
-        [1, 2, 3, 4, 5, 7, 9, 11, 13].into_iter().collect();
+        [1, 2, 3, 4, 5, 7, 8, 9, 10].into_iter().collect();
 }
 
 const BOARD_HALLWAYS_END: usize = 6;
@@ -211,28 +229,21 @@ impl Board {
                 Occupant::Pod(pod_type) => {
                     let room = pod_type.target_room();
                     let reachable = Board::calculate_distances(Some(&self.spots), pos);
-                    let back_has_correct_type = self.spots[room.back] == *occupant;
-                    if pos == room.back || (pos == room.front && back_has_correct_type) {
+                    // room.contains(pos)
+                    // self.room_matches_type(pod_type)
+                    // self.farthest_back_open_spot(room)
+                    if Board::room_matches_type_behind(&self.spots, &room, *pod_type, pos) {
                         // We're in the right place
                         continue;
                     }
 
-                    if back_has_correct_type {
-                        if let Some(path_len) = reachable.get(&room.front) {
-                            // Move to the front spot
+                    if self.room_matches_type(&room, *pod_type) {
+                        let target_spot = self.farthest_back_open_spot(&room).unwrap();
+                        if let Some(path_len) = reachable.get(&target_spot) {
+                            // Move to the spot
                             moves.push(self.with_move(
                                 pos,
-                                room.front,
-                                path_len * pod_type.move_cost(),
-                            ));
-                        }
-                    }
-                    if self.spots[room.back] == Occupant::Empty {
-                        if let Some(path_len) = reachable.get(&room.back) {
-                            // Move to the back spot
-                            moves.push(self.with_move(
-                                pos,
-                                room.back,
+                                target_spot,
                                 path_len * pod_type.move_cost(),
                             ));
                         }
@@ -297,23 +308,58 @@ impl Board {
                 Occupant::Empty => continue,
                 Occupant::Pod(pod_type) => {
                     let room = pod_type.target_room();
-                    if pos == room.back || (pos == room.front && spots[room.back] == *occupant) {
+                    if Board::room_matches_type_behind(&spots, &room, *pod_type, pos) {
                         continue;
                     }
-                    let estimated_distance = if pos == room.front {
-                        // Minimal movement will be 4 spots to leave and come back in
-                        4
-                    } else {
-                        // We know we're not in the right room, minimum movement will be going to
-                        // the front of the correct room.
-                        // TODO - we could memoize the non-spot-dependant path lengths
-                        Board::calculate_distances(None, pos)[&room.front]
-                    };
+                    let estimated_distance =
+                        if let Some(room_idx) = room.positions.iter().position(|v| *v == pos) {
+                            // Minimal movement will be 4 spots to leave and come back in, plus
+                            // however many to get to the front of the room.
+                            4 + room_idx as u32
+                        } else {
+                            // We know we're not in the right room, minimum movement will be going to
+                            // the front of the correct room.
+                            // TODO - we could memoize the non-spot-dependant path lengths
+                            Board::calculate_distances(None, pos)[&room.positions[0]]
+                        };
                     estimated_remaining_cost += estimated_distance * pod_type.move_cost();
                 }
             }
         }
         estimated_remaining_cost
+    }
+
+    fn room_matches_type(&self, room: &Room, pod_type: PodType) -> bool {
+        room.positions.iter().all(|idx| match self.spots[*idx] {
+            Occupant::Empty => true,
+            Occupant::Pod(pt) => pt == pod_type,
+        })
+    }
+
+    fn room_matches_type_behind(
+        spots: &Vec<Occupant>,
+        room: &Room,
+        pod_type: PodType,
+        pos: usize,
+    ) -> bool {
+        match room.positions.iter().position(|v| *v == pos) {
+            // Pos isn't in room.
+            None => false,
+            // Verify everything behind it matches it.
+            Some(room_idx) => room
+                .positions
+                .iter()
+                .skip(room_idx)
+                .all(|v| spots[*v] == Occupant::Pod(pod_type)),
+        }
+    }
+
+    fn farthest_back_open_spot(&self, room: &Room) -> Option<usize> {
+        room.positions
+            .iter()
+            .take_while(|idx| self.spots[**idx] == Occupant::Empty)
+            .last()
+            .cloned()
     }
 
     fn is_sorted(&self) -> bool {
@@ -331,20 +377,25 @@ impl Board {
             self.spots[5],
             self.spots[6]
         );
-        println!(
-            "  {:?} {:?} {:?} {:?}    cost: {}",
-            self.spots[7], self.spots[9], self.spots[11], self.spots[13], self.cost_so_far
-        );
-        println!(
-            "  {:?} {:?} {:?} {:?}    rem:  {}",
-            self.spots[8],
-            self.spots[10],
-            self.spots[12],
-            self.spots[14],
-            self.estimated_remaining_cost
-        );
+        for i in 0..4 {
+            let start = 7 + (i * 4);
+            let extra = if i == 0 {
+                format!("    cost: {}", self.cost_so_far)
+            } else if i == 1 {
+                format!("    rem:  {}", self.estimated_remaining_cost)
+            } else {
+                String::new()
+            };
+            println!(
+                "  {:?} {:?} {:?} {:?}{}",
+                self.spots[start + 0],
+                self.spots[start + 1],
+                self.spots[start + 2],
+                self.spots[start + 3],
+                extra
+            );
+        }
     }
-
     fn print_ancestry(&self) {
         if let Some(parent) = &self.parent {
             parent.print_ancestry();
@@ -371,7 +422,7 @@ fn search_cheapest_sort_path(initial_board: Board) -> u32 {
         // println!("---- PICKING BOARD ----");
         // board.print();
         if board.is_sorted() {
-            board.print_ancestry();
+            // board.print_ancestry();
             return board.cost_so_far;
         }
 
@@ -382,11 +433,20 @@ fn search_cheapest_sort_path(initial_board: Board) -> u32 {
 }
 
 pub fn main() {
-    // let input = "BACDBCDA";
-    let input = "DCBAADCB";
+    // let input = "BCBDADCA";
+    let input = "DBACCADB";
 
-    let initial_board = Board::new(input);
+    let padding_text = "ABCDABCD";
+    let part1_initial_board = Board::new((format!("{}{}", input, padding_text)).as_str());
+    // part1_initial_board.print();
+    // 11489
 
-    println!("Part 1: {}", search_cheapest_sort_path(initial_board));
-    // println!("Part 2: {}", "Answer here");
+    // 12521
+    // 15538
+    println!("Part 1: {}", search_cheapest_sort_path(part1_initial_board));
+
+    let extra_text = "DCBADBAC";
+    let (first, second) = input.split_at(4);
+    let part2_initial_board = Board::new((format!("{}{}{}", first, extra_text, second)).as_str());
+    println!("Part 2: {}", search_cheapest_sort_path(part2_initial_board));
 }
