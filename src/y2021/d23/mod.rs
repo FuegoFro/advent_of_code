@@ -396,6 +396,8 @@ impl Board {
             );
         }
     }
+
+    #[allow(dead_code)]
     fn print_ancestry(&self) {
         if let Some(parent) = &self.parent {
             parent.print_ancestry();
