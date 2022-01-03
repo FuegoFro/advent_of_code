@@ -14,6 +14,21 @@ pub struct Grid<T> {
     width: usize,
 }
 
+impl<T> PartialEq<Self> for Grid<T>
+where
+    T: Eq,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.storage.eq(&other.storage)
+    }
+
+    fn ne(&self, other: &Self) -> bool {
+        self.storage.ne(&other.storage)
+    }
+}
+
+impl<T> Eq for Grid<T> where T: Eq {}
+
 pub enum Neighbors {
     Four,
     Eight,
@@ -128,12 +143,12 @@ impl<T> Grid<T> {
     }
 }
 
-impl<T: ToString> Debug for Grid<T> {
+impl<T: Debug> Debug for Grid<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let strs = self
             .storage
             .iter()
-            .map(|row| row.iter().map(|v| v.to_string()).collect_vec())
+            .map(|row| row.iter().map(|v| format!("{:?}", v)).collect_vec())
             .collect_vec();
 
         let longest = strs
