@@ -1,5 +1,7 @@
 #![feature(array_zip)]
 #![feature(array_methods)]
+#![cfg_attr(not(all), allow(dead_code))]
+#![cfg_attr(not(all), allow(unused_imports))]
 
 #[macro_use]
 extern crate impl_ops;
@@ -11,22 +13,28 @@ extern crate lalrpop_util;
 use structopt::StructOpt;
 
 mod util;
+#[cfg(feature = "y2019")]
 mod y2019;
+#[cfg(feature = "y2020")]
 mod y2020;
+#[cfg(feature = "y2021")]
 mod y2021;
+#[cfg(feature = "y2022")]
+mod y2022;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Main")]
 struct Opt {
-    #[structopt(default_value = "2021")]
+    #[structopt(default_value = "2022")]
     year: u32,
-    #[structopt(default_value = "25")]
+    #[structopt(default_value = "1")]
     day: u32,
 }
 
 fn main() {
     let opt = Opt::from_args();
     match opt.year {
+        #[cfg(feature = "y2019")]
         2019 => match opt.day {
             1 => y2019::d01::main(),
             2 => y2019::d02::main(),
@@ -46,6 +54,7 @@ fn main() {
             16 => y2019::d16::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
+        #[cfg(feature = "y2020")]
         2020 => match opt.day {
             1 => y2020::d01::main(),
             2 => y2020::d02::main(),
@@ -69,6 +78,7 @@ fn main() {
             20 => y2020::d20::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
+        #[cfg(feature = "y2021")]
         2021 => match opt.day {
             1 => y2021::d01::main(),
             2 => y2021::d02::main(),
@@ -95,6 +105,11 @@ fn main() {
             23 => y2021::d23::main(),
             24 => y2021::d24::main(),
             25 => y2021::d25::main(),
+            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        },
+        #[cfg(feature = "y2022")]
+        2022 => match opt.day {
+            1 => y2022::d01::main(),
             _ => println!("Unknown day {} for year {}", opt.day, opt.year),
         },
         _ => println!("Unknown year {}", opt.year),

@@ -7,6 +7,14 @@ build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = ["y2022"]
+all = ["y2019", "y2020", "y2021", "y2022"]
+y2019 = []
+y2020 = []
+y2021 = []
+y2022 = []
+
 [profile.release]
 lto = "thin"
 
