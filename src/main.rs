@@ -9,6 +9,7 @@ extern crate impl_ops;
 extern crate lazy_static;
 #[macro_use]
 extern crate lalrpop_util;
+extern crate core;
 
 use structopt::StructOpt;
 
@@ -123,6 +124,7 @@ fn main() {
             days: vec![
                 // Comment for break
                 y2022::d01::main,
+                y2022::d02::main,
             ],
         },
     ];
