@@ -25,93 +25,126 @@ mod y2022;
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Main")]
 struct Opt {
-    #[structopt(default_value = "2022")]
+    #[structopt(default_value = "0")]
     year: u32,
-    #[structopt(default_value = "1")]
+    #[structopt(default_value = "0")]
     day: u32,
 }
 
+struct Year {
+    year: u32,
+    days: Vec<fn()>,
+}
+
 fn main() {
-    let opt = Opt::from_args();
-    match opt.year {
+    let years = vec![
         #[cfg(feature = "y2019")]
-        2019 => match opt.day {
-            1 => y2019::d01::main(),
-            2 => y2019::d02::main(),
-            3 => y2019::d03::main(),
-            4 => y2019::d04::main(),
-            5 => y2019::d05::main(),
-            6 => y2019::d06::main(),
-            7 => y2019::d07::main(),
-            8 => y2019::d08::main(),
-            9 => y2019::d09::main(),
-            10 => y2019::d10::main(),
-            11 => y2019::d11::main(),
-            12 => y2019::d12::main(),
-            13 => y2019::d13::main(),
-            14 => y2019::d14::main(),
-            15 => y2019::d15::main(),
-            16 => y2019::d16::main(),
-            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        Year {
+            year: 2019,
+            days: vec![
+                y2019::d01::main,
+                y2019::d02::main,
+                y2019::d03::main,
+                y2019::d04::main,
+                y2019::d05::main,
+                y2019::d06::main,
+                y2019::d07::main,
+                y2019::d08::main,
+                y2019::d09::main,
+                y2019::d10::main,
+                y2019::d11::main,
+                y2019::d12::main,
+                y2019::d13::main,
+                y2019::d14::main,
+                y2019::d15::main,
+                y2019::d16::main,
+            ],
         },
         #[cfg(feature = "y2020")]
-        2020 => match opt.day {
-            1 => y2020::d01::main(),
-            2 => y2020::d02::main(),
-            3 => y2020::d03::main(),
-            4 => y2020::d04::main(),
-            5 => y2020::d05::main(),
-            6 => y2020::d06::main(),
-            7 => y2020::d07::main(),
-            8 => y2020::d08::main(),
-            9 => y2020::d09::main(),
-            10 => y2020::d10::main(),
-            11 => y2020::d11::main(),
-            12 => y2020::d12::main(),
-            13 => y2020::d13::main(),
-            14 => y2020::d14::main(),
-            15 => y2020::d15::main(),
-            16 => y2020::d16::main(),
-            17 => y2020::d17::main(),
-            18 => y2020::d18::main(),
-            19 => y2020::d19::main(),
-            20 => y2020::d20::main(),
-            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        Year {
+            year: 2020,
+            days: vec![
+                y2020::d01::main,
+                y2020::d02::main,
+                y2020::d03::main,
+                y2020::d04::main,
+                y2020::d05::main,
+                y2020::d06::main,
+                y2020::d07::main,
+                y2020::d08::main,
+                y2020::d09::main,
+                y2020::d10::main,
+                y2020::d11::main,
+                y2020::d12::main,
+                y2020::d13::main,
+                y2020::d14::main,
+                y2020::d15::main,
+                y2020::d16::main,
+                y2020::d17::main,
+                y2020::d18::main,
+                y2020::d19::main,
+                y2020::d20::main,
+            ],
         },
         #[cfg(feature = "y2021")]
-        2021 => match opt.day {
-            1 => y2021::d01::main(),
-            2 => y2021::d02::main(),
-            3 => y2021::d03::main(),
-            4 => y2021::d04::main(),
-            5 => y2021::d05::main(),
-            6 => y2021::d06::main(),
-            7 => y2021::d07::main(),
-            8 => y2021::d08::main(),
-            9 => y2021::d09::main(),
-            10 => y2021::d10::main(),
-            11 => y2021::d11::main(),
-            12 => y2021::d12::main(),
-            13 => y2021::d13::main(),
-            14 => y2021::d14::main(),
-            15 => y2021::d15::main(),
-            16 => y2021::d16::main(),
-            17 => y2021::d17::main(),
-            18 => y2021::d18::main(),
-            19 => y2021::d19::main(),
-            20 => y2021::d20::main(),
-            21 => y2021::d21::main(),
-            22 => y2021::d22::main(),
-            23 => y2021::d23::main(),
-            24 => y2021::d24::main(),
-            25 => y2021::d25::main(),
-            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        Year {
+            year: 2021,
+            days: vec![
+                y2021::d01::main,
+                y2021::d02::main,
+                y2021::d03::main,
+                y2021::d04::main,
+                y2021::d05::main,
+                y2021::d06::main,
+                y2021::d07::main,
+                y2021::d08::main,
+                y2021::d09::main,
+                y2021::d10::main,
+                y2021::d11::main,
+                y2021::d12::main,
+                y2021::d13::main,
+                y2021::d14::main,
+                y2021::d15::main,
+                y2021::d16::main,
+                y2021::d17::main,
+                y2021::d18::main,
+                y2021::d19::main,
+                y2021::d20::main,
+                y2021::d21::main,
+                y2021::d22::main,
+                y2021::d23::main,
+                y2021::d24::main,
+                y2021::d25::main,
+            ],
         },
         #[cfg(feature = "y2022")]
-        2022 => match opt.day {
-            1 => y2022::d01::main(),
-            _ => println!("Unknown day {} for year {}", opt.day, opt.year),
+        Year {
+            year: 2022,
+            days: vec![
+                // Comment for break
+                y2022::d01::main,
+            ],
         },
-        _ => println!("Unknown year {}", opt.year),
+    ];
+
+    let opt = Opt::from_args();
+    let year = if opt.year != 0 {
+        opt.year
+    } else {
+        years.last().unwrap().year
     };
+    let year = years
+        .iter()
+        .find(|y| y.year == year)
+        .unwrap_or_else(|| panic!("Unknown year {}", year));
+    let day = if opt.day != 0 {
+        opt.day as usize
+    } else {
+        year.days.len() - 1
+    };
+    let day = year
+        .days
+        .get(day)
+        .unwrap_or_else(|| panic!("Unknown day {} for year {}", day, year.year));
+    day();
 }
