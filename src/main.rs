@@ -125,6 +125,7 @@ fn main() {
                 // Comment for break
                 y2022::d01::main,
                 y2022::d02::main,
+                y2022::d03::main,
             ],
         },
     ];
