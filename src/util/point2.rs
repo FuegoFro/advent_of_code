@@ -46,6 +46,35 @@ impl Delta {
     }
 }
 
+impl_op_ex!(+|a: &Delta, b: &Delta| -> Delta {
+    Delta {
+        dx: a.dx + b.dx,
+        dy: a.dy + b.dy,
+    }
+});
+impl_op_ex!(-|a: &Delta, b: &Delta| -> Delta {
+    Delta {
+        dx: a.dx - b.dx,
+        dy: a.dy - b.dy,
+    }
+});
+impl_op_ex!(*|a: &Delta, b: i32| -> Delta {
+    Delta {
+        dx: a.dx * b,
+        dy: a.dy * b,
+    }
+});
+impl_op_ex!(/|a: &Delta, b: i32| -> Delta {
+    Delta {
+        dx: a.dx / b,
+        dy: a.dy / b,
+    }
+});
+impl_op!(+= |a: &mut Delta, b: Delta| { *a = *a + b });
+impl_op!(+= |a: &mut Delta, b: &Delta| { *a = *a + b });
+impl_op!(-= |a: &mut Delta, b: Delta| { *a = *a - b });
+impl_op!(-= |a: &mut Delta, b: &Delta| { *a = *a - b });
+
 // TODO - Make these points generic to reduce copy/paste.
 //  Requires https://github.com/carbotaniuman/auto_ops/pull/4
 
@@ -95,10 +124,10 @@ impl_op_ex!(/|a: &PointS, b: i32| -> PointS {
         y: a.y / b,
     }
 });
-impl_op!(+= |a: &mut PointS, b: Delta| { *a = &*a + b });
-impl_op!(+= |a: &mut PointS, b: &Delta| { *a = &*a + b });
-impl_op!(-= |a: &mut PointS, b: Delta| { *a = &*a - b });
-impl_op!(-= |a: &mut PointS, b: &Delta| { *a = &*a - b });
+impl_op!(+= |a: &mut PointS, b: Delta| { *a = *a + b });
+impl_op!(+= |a: &mut PointS, b: &Delta| { *a = *a + b });
+impl_op!(-= |a: &mut PointS, b: Delta| { *a = *a - b });
+impl_op!(-= |a: &mut PointS, b: &Delta| { *a = *a - b });
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
 pub struct PointU {
@@ -111,6 +140,33 @@ impl PointU {
 
     pub const fn new(x: usize, y: usize) -> PointU {
         PointU { x, y }
+    }
+
+    pub fn checked_add(&self, delta: &Delta) -> Option<Self> {
+        if let (Some(x), Some(y)) = (
+            checked_add_unsigned(self.x, delta.dx),
+            checked_add_unsigned(self.y, delta.dy),
+        ) {
+            Some(Self { x, y })
+        } else {
+            None
+        }
+    }
+}
+
+fn checked_add_unsigned(a: usize, b: i32) -> Option<usize> {
+    if b >= 0 {
+        a.checked_add(b as usize)
+    } else {
+        a.checked_sub((-b) as usize)
+    }
+}
+
+fn checked_sub_unsigned(a: usize, b: i32) -> Option<usize> {
+    if b >= 0 {
+        a.checked_sub(b as usize)
+    } else {
+        a.checked_add((-b) as usize)
     }
 }
 
@@ -160,7 +216,7 @@ impl_op_ex!(/|a: &PointU, b: usize| -> PointU {
         y: a.y / b,
     }
 });
-impl_op!(+= |a: &mut PointU, b: Delta| { *a = &*a + b });
-impl_op!(+= |a: &mut PointU, b: &Delta| { *a = &*a + b });
-impl_op!(-= |a: &mut PointU, b: Delta| { *a = &*a - b });
-impl_op!(-= |a: &mut PointU, b: &Delta| { *a = &*a - b });
+impl_op!(+= |a: &mut PointU, b: Delta| { *a = *a + b });
+impl_op!(+= |a: &mut PointU, b: &Delta| { *a = *a + b });
+impl_op!(-= |a: &mut PointU, b: Delta| { *a = *a - b });
+impl_op!(-= |a: &mut PointU, b: &Delta| { *a = *a - b });
