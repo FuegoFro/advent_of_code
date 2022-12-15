@@ -1,5 +1,21 @@
 use crate::util::min_max;
+use num_traits::Num;
 use std::ops;
+
+fn rotate_about_origin_deg<T: Num + Copy>(deg: u32, x: T, y: T) -> (T, T) {
+    let zero = T::zero();
+    let one = T::one();
+    let neg_one = zero - one;
+    let deg_mod = deg.rem_euclid(360);
+    let (sin, cos): (T, T) = match deg_mod {
+        0 => (zero, one),
+        90 => (one, zero),
+        180 => (zero, neg_one),
+        270 => (neg_one, zero),
+        _ => panic!("Can only handle multiples of 90 degrees, got {}", deg),
+    };
+    (x * cos - y * sin, x * sin + y * cos)
+}
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
 pub struct Delta {
@@ -40,9 +56,20 @@ impl Delta {
         Delta::DOWN,
         Delta::DOWN_RIGHT,
     ];
+    pub const DIAGONALS: [Delta; 4] = [
+        Delta::UP_LEFT,
+        Delta::UP_RIGHT,
+        Delta::DOWN_LEFT,
+        Delta::DOWN_RIGHT,
+    ];
 
     pub const fn new(dx: i32, dy: i32) -> Self {
         Delta { dx, dy }
+    }
+
+    pub fn rotate_about_origin_deg(&self, deg: u32) -> Self {
+        let (dx, dy) = rotate_about_origin_deg(deg, self.dx, self.dy);
+        Self::new(dx, dy)
     }
 }
 
@@ -100,6 +127,7 @@ impl PointS {
 }
 
 impl_op_ex!(+ |a: &PointS, b: &Delta| -> PointS { PointS { x: a.x + b.dx, y: a.y + b.dy }});
+impl_op_ex!(+ |a: &Delta, b: &PointS| -> PointS { b + a });
 impl_op_ex!(-|a: &PointS, b: &Delta| -> PointS {
     PointS {
         x: a.x - b.dx,
@@ -118,6 +146,7 @@ impl_op_ex!(*|a: &PointS, b: i32| -> PointS {
         y: a.y * b,
     }
 });
+impl_op_ex!(*|a: i32, b: &PointS| -> PointS { b * a });
 impl_op_ex!(/|a: &PointS, b: i32| -> PointS {
     PointS {
         x: a.x / b,
@@ -192,6 +221,7 @@ impl_op_ex!(+|a: &PointU, b: &Delta| -> PointU {
         y: add_unsigned(a.y, b.dy),
     }
 });
+impl_op_ex!(+ |a: &Delta, b: &PointU| -> PointU { b + a });
 impl_op_ex!(-|a: &PointU, b: &Delta| -> PointU {
     PointU {
         x: sub_unsigned(a.x, b.dx),
@@ -210,6 +240,7 @@ impl_op_ex!(*|a: &PointU, b: usize| -> PointU {
         y: a.y * b,
     }
 });
+impl_op_ex!(*|a: usize, b: &PointU| -> PointU { b * a });
 impl_op_ex!(/|a: &PointU, b: usize| -> PointU {
     PointU {
         x: a.x / b,
