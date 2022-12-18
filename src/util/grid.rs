@@ -141,6 +141,10 @@ impl<T> Grid<T> {
                 .map(move |(x, v)| (PointU::new(x, y), v))
         })
     }
+
+    pub fn get(&self, index: PointU) -> Option<&T> {
+        self.storage.get(index.y).and_then(|row| row.get(index.x))
+    }
 }
 
 impl<T: Debug> Debug for Grid<T> {

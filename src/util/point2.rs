@@ -71,6 +71,10 @@ impl Delta {
         let (dx, dy) = rotate_about_origin_deg(deg, self.dx, self.dy);
         Self::new(dx, dy)
     }
+
+    pub fn l1_dist(&self) -> i32 {
+        self.dx.abs() + self.dy.abs()
+    }
 }
 
 impl_op_ex!(+|a: &Delta, b: &Delta| -> Delta {
@@ -91,6 +95,7 @@ impl_op_ex!(*|a: &Delta, b: i32| -> Delta {
         dy: a.dy * b,
     }
 });
+impl_op_ex!(*|a: i32, b: &Delta| -> Delta { b * a });
 impl_op_ex!(/|a: &Delta, b: i32| -> Delta {
     Delta {
         dx: a.dx / b,
@@ -180,6 +185,13 @@ impl PointU {
         } else {
             None
         }
+    }
+
+    pub fn get_bounding_box<'a>(points: impl Iterator<Item = &'a PointU>) -> (PointU, PointU) {
+        let (xs, ys): (Vec<_>, Vec<_>) = points.map(|p| (p.x, p.y)).unzip();
+        let (min_x, max_x) = min_max(xs);
+        let (min_y, may_y) = min_max(ys);
+        (PointU::new(min_x, min_y), PointU::new(max_x, may_y))
     }
 }
 

@@ -11,6 +11,11 @@ pub fn p_u32(s: &str) -> u32 {
     s.parse().expect(s)
 }
 
+#[allow(dead_code)]
+pub fn p_usize(s: &str) -> usize {
+    s.parse().expect(s)
+}
+
 pub fn p_u32c(c: char) -> u32 {
     c.to_digit(10).expect(&format!("-->{}<--", c))
 }
@@ -34,7 +39,7 @@ pub fn split_once<'a>(s: &'a str, delim: &str) -> (&'a str, &'a str) {
     (split.next().unwrap(), split.next().unwrap())
 }
 
-pub fn min_max(vals: Vec<i32>) -> (i32, i32) {
+pub fn min_max<N: PartialOrd + Copy>(vals: Vec<N>) -> (N, N) {
     match vals.into_iter().minmax() {
         MinMaxResult::NoElements => panic!("Expected some elements"),
         MinMaxResult::OneElement(e) => (e, e),
