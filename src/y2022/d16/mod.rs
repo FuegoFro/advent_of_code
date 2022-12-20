@@ -5,6 +5,7 @@ use recap::Recap;
 use serde::Deserialize;
 use std::cmp::max;
 use std::collections::{HashMap, HashSet, VecDeque};
+use std::fmt::{Display, Formatter};
 
 #[derive(Deserialize, Recap, Debug)]
 #[recap(
@@ -16,7 +17,23 @@ struct ValveRaw {
     neighbors: Vec<String>,
 }
 
-fn find_distance(neighbors: &[Vec<usize>], start: usize, end: usize) -> u32 {
+// We use a usize instead of a string since it's *way* more memory efficient and therefore faster.
+#[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
+struct Valve(usize);
+
+impl Display for Valve {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.write_fmt(format_args!("{}", self.0))
+    }
+}
+
+impl Valve {
+    fn mask(&self) -> u32 {
+        1 << self.0
+    }
+}
+
+fn find_distance(neighbors: &[Vec<Valve>], start: Valve, end: Valve) -> u32 {
     // BFS
     let mut frontier = VecDeque::from([(start, 0)]);
     let mut seen = HashSet::new();
@@ -29,7 +46,7 @@ fn find_distance(neighbors: &[Vec<usize>], start: usize, end: usize) -> u32 {
         if node == end {
             return distance;
         }
-        for neighbor in &neighbors[node] {
+        for neighbor in &neighbors[node.0] {
             frontier.push_back((*neighbor, distance + 1));
         }
     }
@@ -39,9 +56,9 @@ fn find_distance(neighbors: &[Vec<usize>], start: usize, end: usize) -> u32 {
 
 struct Valves {
     rates: Vec<u32>,
-    neighbors: Vec<Vec<usize>>,
-    starting_valve: usize,
-    pairwise_distances: HashMap<(usize, usize), u32>,
+    neighbors: Vec<Vec<Valve>>,
+    starting_valve: Valve,
+    pairwise_distances: HashMap<(Valve, Valve), u32>,
 }
 
 impl Valves {
@@ -65,7 +82,7 @@ impl Valves {
         let label_to_index_mapping = raw_valves
             .iter()
             .enumerate()
-            .map(|(index, (label, _, _))| (label.clone(), index))
+            .map(|(index, (label, _, _))| (label.clone(), Valve(index)))
             .collect::<HashMap<_, _>>();
 
         let rates = raw_valves.iter().map(|(_, rate, _)| *rate).collect_vec();
@@ -81,10 +98,12 @@ impl Valves {
             .collect_vec();
 
         let pairwise_distances = (0..raw_valves.len())
-            .flat_map(|valve| {
+            .flat_map(|start| {
                 let neighbors = &neighbors;
-                (0..raw_valves.len()).map(move |neighbor| {
-                    ((valve, neighbor), find_distance(neighbors, valve, neighbor))
+                (0..raw_valves.len()).map(move |end| {
+                    let start = Valve(start);
+                    let end = Valve(end);
+                    ((start, end), find_distance(neighbors, start, end))
                 })
             })
             .collect::<HashMap<_, _>>();
@@ -98,6 +117,14 @@ impl Valves {
             pairwise_distances,
         }
     }
+
+    fn rate(&self, valve: Valve) -> u32 {
+        self.rates[valve.0]
+    }
+
+    fn neighbors(&self, valve: Valve) -> impl Iterator<Item = &Valve> {
+        self.neighbors[valve.0].iter()
+    }
 }
 
 #[derive(Clone, Derivative)]
@@ -106,7 +133,7 @@ struct State<const NUM_AGENTS: usize> {
     // #[derivative(PartialEq = "ignore", Hash = "ignore")]
     // actions: Vec<String>,
     open_valves: u32,
-    current_valves: [usize; NUM_AGENTS],
+    current_valves: [Valve; NUM_AGENTS],
     current_active_agent: usize,
     released_flow: u32,
     time_remaining: u32,
@@ -124,12 +151,12 @@ impl<const NUM_AGENTS: usize> State<NUM_AGENTS> {
         //     valve_open_duration,
         //     rate * valve_open_duration
         // ));
-        new_state.open_valves |= 1 << new_state.current_valves[new_state.current_active_agent];
+        new_state.open_valves |= new_state.current_valves[new_state.current_active_agent].mask();
         new_state.released_flow += rate * valve_open_duration;
         new_state.advance()
     }
 
-    fn move_to_valve(&self, valve: usize) -> Self {
+    fn move_to_valve(&self, valve: Valve) -> Self {
         let mut new_state = self.clone();
         // new_state.actions.push(format!(
         //     "{}: {} - Moved to {}",
@@ -149,8 +176,8 @@ impl<const NUM_AGENTS: usize> State<NUM_AGENTS> {
         self
     }
 
-    fn is_valve_open(&self, valve: usize) -> bool {
-        self.open_valves & (1 << valve) != 0
+    fn is_valve_open(&self, valve: Valve) -> bool {
+        self.open_valves & valve.mask() != 0
     }
 }
 
@@ -163,12 +190,13 @@ fn enqueue_state<const NUM_AGENTS: usize>(
         .rates
         .iter()
         .enumerate()
-        .filter(|(label, rate)| **rate > 0 && !state.is_valve_open(*label))
-        .map(|(label, rate)| {
+        .map(|(index, rate)| (Valve(index), rate))
+        .filter(|(valve, rate)| **rate > 0 && !state.is_valve_open(*valve))
+        .map(|(valve, rate)| {
             let closest_distance = state
                 .current_valves
                 .iter()
-                .map(|v| valves.pairwise_distances[&(*v, label)])
+                .map(|other| valves.pairwise_distances[&(*other, valve)])
                 .min()
                 .unwrap();
             rate * state.time_remaining.saturating_sub(1 + closest_distance)
@@ -210,11 +238,11 @@ fn do_a_star<const NUM_AGENTS: usize>(valves: &Valves, total_time: u32) -> u32 {
         let current_valve = state.current_valves[state.current_active_agent];
 
         // Don't turn on the current valve, just go to another one
-        for neighbor in valves.neighbors[current_valve].iter() {
+        for neighbor in valves.neighbors(current_valve) {
             enqueue_state(&mut frontier, valves, state.move_to_valve(*neighbor));
         }
 
-        let rate = valves.rates[current_valve];
+        let rate = valves.rate(current_valve);
         if rate > 0 && state.time_remaining > 0 && !state.is_valve_open(current_valve) {
             enqueue_state(&mut frontier, valves, state.open_current_valve(rate));
         }
