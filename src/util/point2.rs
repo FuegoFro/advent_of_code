@@ -193,6 +193,10 @@ impl PointU {
         let (min_y, may_y) = min_max(ys);
         (PointU::new(min_x, min_y), PointU::new(max_x, may_y))
     }
+
+    pub fn as_signed(&self) -> PointS {
+        PointS::new(self.x as i32, self.y as i32)
+    }
 }
 
 fn checked_add_unsigned(a: usize, b: i32) -> Option<usize> {
@@ -259,7 +263,19 @@ impl_op_ex!(/|a: &PointU, b: usize| -> PointU {
         y: a.y / b,
     }
 });
-impl_op!(+= |a: &mut PointU, b: Delta| { *a = *a + b });
-impl_op!(+= |a: &mut PointU, b: &Delta| { *a = *a + b });
-impl_op!(-= |a: &mut PointU, b: Delta| { *a = *a - b });
-impl_op!(-= |a: &mut PointU, b: &Delta| { *a = *a - b });
+impl_op!(+= |a: &mut PointU, b: Delta| {
+    a.x = add_unsigned(a.x, b.dx);
+    a.y = add_unsigned(a.y, b.dy);
+});
+impl_op!(+= |a: &mut PointU, b: &Delta| {
+    a.x = add_unsigned(a.x, b.dx);
+    a.y = add_unsigned(a.y, b.dy);
+});
+impl_op!(-= |a: &mut PointU, b: Delta| {
+    a.x = sub_unsigned(a.x, b.dx);
+    a.y = sub_unsigned(a.y, b.dy);
+});
+impl_op!(-= |a: &mut PointU, b: &Delta| {
+    a.x = sub_unsigned(a.x, b.dx);
+    a.y = sub_unsigned(a.y, b.dy);
+});

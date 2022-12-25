@@ -6,6 +6,7 @@ use serde::Deserialize;
 use std::cmp::max;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fmt::{Display, Formatter};
+use std::time::{Duration, Instant};
 
 #[derive(Deserialize, Recap, Debug)]
 #[recap(
@@ -257,9 +258,13 @@ pub fn main() {
 
     let valves = Valves::from_str(&input);
 
+    let start = Instant::now();
     let max_pressure_pt1 = do_a_star::<1>(&valves, 30);
-    println!("Part 1: {}", max_pressure_pt1);
+    let end = Instant::now();
+    println!("Part 1: {} (took {:?})", max_pressure_pt1, end - start);
 
+    let start = Instant::now();
     let max_pressure_pt2 = do_a_star::<2>(&valves, 26);
-    println!("Part 2: {}", max_pressure_pt2);
+    let end = Instant::now();
+    println!("Part 2: {} (took {:?})", max_pressure_pt2, end - start);
 }
