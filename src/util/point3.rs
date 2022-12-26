@@ -1,6 +1,7 @@
 use crate::util::min_max;
 use itertools::Itertools;
 use std::cmp::{max, min};
+use std::fmt::{Debug, Formatter};
 use std::ops;
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
@@ -19,6 +20,15 @@ impl Delta3 {
     pub const Z_POS: Delta3 = Delta3::new(0, 0, 1);
     pub const Z_NEG: Delta3 = Delta3::new(0, 0, -1);
 
+    pub const NEIGHBORS_6: [Delta3; 6] = [
+        Delta3::X_POS,
+        Delta3::X_NEG,
+        Delta3::Y_POS,
+        Delta3::Y_NEG,
+        Delta3::Z_POS,
+        Delta3::Z_NEG,
+    ];
+
     pub const fn new(dx: i32, dy: i32, dz: i32) -> Self {
         Delta3 { dx, dy, dz }
     }
@@ -28,11 +38,44 @@ impl Delta3 {
     }
 }
 
-#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
+impl_op_ex!(+ |a: &Delta3, b: &Delta3| -> Delta3 { Delta3 { dx: a.dx + b.dx, dy: a.dy + b.dy, dz: a.dz + b.dz }});
+impl_op_ex!(-|a: &Delta3, b: &Delta3| -> Delta3 {
+    Delta3 {
+        dx: a.dx - b.dx,
+        dy: a.dy - b.dy,
+        dz: a.dz - b.dz,
+    }
+});
+impl_op_ex!(*|a: &Delta3, b: i32| -> Delta3 {
+    Delta3 {
+        dx: a.dx * b,
+        dy: a.dy * b,
+        dz: a.dz * b,
+    }
+});
+impl_op_ex!(/|a: &Delta3, b: i32| -> Delta3 {
+    Delta3 {
+        dx: a.dx / b,
+        dy: a.dy / b,
+        dz: a.dz / b,
+    }
+});
+impl_op!(+= |a: &mut Delta3, b: Delta3| { *a = *a + b });
+impl_op!(+= |a: &mut Delta3, b: &Delta3| { *a = *a + b });
+impl_op!(-= |a: &mut Delta3, b: Delta3| { *a = *a - b });
+impl_op!(-= |a: &mut Delta3, b: &Delta3| { *a = *a - b });
+
+#[derive(Copy, Clone, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Point3 {
     pub x: i32,
     pub y: i32,
     pub z: i32,
+}
+
+impl Debug for Point3 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.write_fmt(format_args!("Point3 ({}, {}, {})", self.x, self.y, self.z))
+    }
 }
 
 impl Point3 {
@@ -48,6 +91,10 @@ impl Point3 {
             self.y.clamp(bound.start.y, bound.end.y),
             self.z.clamp(bound.start.z, bound.end.z),
         )
+    }
+
+    pub fn get_bounding_box<'a>(points: impl Iterator<Item = &'a Self>) -> BoundingBox {
+        BoundingBox::containing_points(points)
     }
 }
 
@@ -80,10 +127,10 @@ impl_op_ex!(/|a: &Point3, b: i32| -> Point3 {
         z: a.z / b,
     }
 });
-impl_op!(+= |a: &mut Point3, b: Delta3| { *a = &*a + b });
-impl_op!(+= |a: &mut Point3, b: &Delta3| { *a = &*a + b });
-impl_op!(-= |a: &mut Point3, b: Delta3| { *a = &*a - b });
-impl_op!(-= |a: &mut Point3, b: &Delta3| { *a = &*a - b });
+impl_op!(+= |a: &mut Point3, b: Delta3| { *a = *a + b });
+impl_op!(+= |a: &mut Point3, b: &Delta3| { *a = *a + b });
+impl_op!(-= |a: &mut Point3, b: Delta3| { *a = *a - b });
+impl_op!(-= |a: &mut Point3, b: &Delta3| { *a = *a - b });
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct BoundingBox {
