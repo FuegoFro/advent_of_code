@@ -1,5 +1,6 @@
 #![feature(array_zip)]
 #![feature(array_methods)]
+#![feature(variant_count)]
 #![cfg_attr(not(all), allow(dead_code))]
 #![cfg_attr(not(all), allow(unused_imports))]
 
@@ -141,6 +142,7 @@ fn main() {
                 y2022::d16::main,
                 y2022::d17::main,
                 y2022::d18::main,
+                y2022::d19::main,
             ],
         },
     ];
