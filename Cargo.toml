@@ -37,6 +37,7 @@ recap = "0.1"
 regex = "1"
 serde = "1.0"
 serde_json = "1.0"
+skiplist = "0.4.0"
 structopt = "0.3"
 tuple = "0.5.1"
 
