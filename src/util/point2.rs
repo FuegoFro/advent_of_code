@@ -129,6 +129,10 @@ impl PointS {
         let (min_y, may_y) = min_max(ys);
         (PointS::new(min_x, min_y), PointS::new(max_x, may_y))
     }
+
+    pub fn as_unsigned(&self) -> PointU {
+        PointU::new(self.x as usize, self.y as usize)
+    }
 }
 
 impl_op_ex!(+ |a: &PointS, b: &Delta| -> PointS { PointS { x: a.x + b.dx, y: a.y + b.dy }});
