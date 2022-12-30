@@ -32,7 +32,7 @@ fn find_pos(input: &str, distinct_count: usize) -> usize {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let pos1 = find_pos(&input, 4);
     println!("Part 1: {}", pos1);

@@ -144,7 +144,7 @@ fn run_reverse(
                 );
                 run_reverse(monkeys, values, left);
             }
-            val @ _ => panic!("Unexpected (left, right) = {:?}", val),
+            val => panic!("Unexpected (left, right) = {:?}", val),
         },
     };
 }

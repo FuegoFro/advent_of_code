@@ -1,3 +1,4 @@
+#![allow(clippy::needless_question_mark)]
 use crate::util::{p_u32, split_once};
 use itertools::Itertools;
 use priority_queue::PriorityQueue;

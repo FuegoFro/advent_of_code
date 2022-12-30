@@ -9,15 +9,15 @@ fn contains(a: &Range, b: &Range) -> bool {
 }
 
 fn any_overlap(a: &Range, b: &Range) -> bool {
-    a.0 <= b.0 && b.0 <= a.1 || a.0 <= b.0 && b.0 <= a.1
+    a.0 <= b.0 && b.0 <= a.1 // supposed to swap vars? || a.0 <= b.0 && b.0 <= a.1
 }
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let ranges = input
-        .split("\n")
+        .split('\n')
         .map(|l| {
             l.split_once(',')
                 .unwrap()

@@ -32,10 +32,10 @@ impl_op_ex!(*|a: &Point, b: u32| -> Point {
         y: a.y * b as i32,
     }
 });
-impl_op!(+= |a: &mut Point, b: Point| { *a = &*a + b });
-impl_op!(+= |a: &mut Point, b: &Point| { *a = &*a + b });
-impl_op!(-= |a: &mut Point, b: Point| { *a = &*a - b });
-impl_op!(-= |a: &mut Point, b: &Point| { *a = &*a - b });
+impl_op!(+= |a: &mut Point, b: Point| { *a = *a + b });
+impl_op!(+= |a: &mut Point, b: &Point| { *a = *a + b });
+impl_op!(-= |a: &mut Point, b: Point| { *a = *a - b });
+impl_op!(-= |a: &mut Point, b: &Point| { *a = *a - b });
 
 impl Point {
     pub const ORIGIN: Point = Point { x: 0, y: 0 };
@@ -54,7 +54,7 @@ impl Point {
 
     /// Returns a new point that has been rotate counter clockwise by the given degrees.
     pub fn rotate_about_origin_deg(&self, deg: u32) -> Point {
-        let deg_mod = ((deg % 360) + 360) % 360;
+        let deg_mod = deg.rem_euclid(360);
         let (sin, cos) = match deg_mod {
             0 => (0, 1),
             90 => (1, 0),

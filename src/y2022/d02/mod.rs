@@ -90,7 +90,7 @@ pub fn main() {
     let rounds1 = input
         .split('\n')
         .map(|l| {
-            let (a, b) = l.split_once(" ").unwrap();
+            let (a, b) = l.split_once(' ').unwrap();
             (Choice::from_str(a), Choice::from_str(b))
         })
         .collect_vec();
@@ -105,7 +105,7 @@ pub fn main() {
     let rounds2 = input
         .split('\n')
         .map(|l| {
-            let (a, b) = l.split_once(" ").unwrap();
+            let (a, b) = l.split_once(' ').unwrap();
             (Choice::from_str(a), Outcome::from_str(b))
         })
         .collect_vec();

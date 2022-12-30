@@ -1,3 +1,4 @@
+#![allow(clippy::needless_question_mark)]
 use itertools::Itertools;
 use recap::Recap;
 use serde::Deserialize;
@@ -23,12 +24,12 @@ struct Crates {
 
 impl Crates {
     fn from_str(s: &str) -> Self {
-        let lines = s.split("\n").collect_vec();
+        let lines = s.split('\n').collect_vec();
         let num_cols = (lines.last().unwrap().len() + 2) / 4;
         let mut crates = vec![Vec::new(); num_cols];
 
         for row in lines.iter().rev().skip(1) {
-            for col in 0..num_cols {
+            for (col, crate_col) in crates.iter_mut().enumerate() {
                 let col_idx = (col * 4) + 1;
                 if col_idx >= row.len() {
                     continue;
@@ -37,7 +38,7 @@ impl Crates {
                 if val == ' ' {
                     continue;
                 }
-                crates[col].push(val);
+                crate_col.push(val);
             }
         }
 
@@ -64,12 +65,12 @@ pub fn main() {
     //     .replace("\r", "");
     let input = include_str!("actual_input.txt")
         .trim_end()
-        .replace("\r", "");
+        .replace('\r', "");
 
     let (start_str, moves_str) = input.split_once("\n\n").unwrap();
     let mut crates1 = Crates::from_str(start_str);
     let mut crates2 = crates1.clone();
-    let moves = moves_str.split("\n").map(Move::from_str).collect_vec();
+    let moves = moves_str.split('\n').map(Move::from_str).collect_vec();
 
     for m in moves.iter() {
         crates1.do_move(m, false);

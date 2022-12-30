@@ -1,3 +1,4 @@
+#![allow(clippy::needless_question_mark)]
 use crate::util::point2::{PointS, PointU};
 use itertools::Itertools;
 use recap::Recap;

@@ -37,7 +37,7 @@ pub fn main() {
     let mut grid = Grid::from_str(input, "\n", None, |c| {
         let c = c.chars().next().unwrap();
         match c {
-            'a'..='z' => (c as u8) - ('a' as u8),
+            'a'..='z' => (c as u8) - b'a',
             'S' => START_SENTINEL,
             'E' => END_SENTINEL,
             _ => panic!("Unknown grid char {:?}", c),

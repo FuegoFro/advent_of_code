@@ -1,3 +1,4 @@
+#![allow(clippy::needless_question_mark)]
 use derivative::Derivative;
 use itertools::Itertools;
 use priority_queue::PriorityQueue;

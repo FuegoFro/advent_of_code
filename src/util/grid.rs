@@ -21,10 +21,6 @@ where
     fn eq(&self, other: &Self) -> bool {
         self.storage.eq(&other.storage)
     }
-
-    fn ne(&self, other: &Self) -> bool {
-        self.storage.ne(&other.storage)
-    }
 }
 
 impl<T> Eq for Grid<T> where T: Eq {}

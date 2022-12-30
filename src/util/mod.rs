@@ -17,7 +17,7 @@ pub fn p_usize(s: &str) -> usize {
 }
 
 pub fn p_u32c(c: char) -> u32 {
-    c.to_digit(10).expect(&format!("-->{}<--", c))
+    c.to_digit(10).unwrap_or_else(|| panic!("-->{}<--", c))
 }
 
 pub fn p_u64(s: &str) -> u64 {

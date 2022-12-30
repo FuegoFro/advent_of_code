@@ -4,7 +4,7 @@ use crate::util::point2::Delta;
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let grid = Grid::from_str(input, "\n", None, p_u32);
 

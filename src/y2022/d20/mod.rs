@@ -40,8 +40,7 @@ pub fn main() {
     println!("Part 1: {}", pt1);
 
     let pt2 = decrypt_key(
-        list.clone()
-            .into_iter()
+        list.into_iter()
             .map(|(idx, item)| (idx, item * 811589153))
             .collect(),
         10,

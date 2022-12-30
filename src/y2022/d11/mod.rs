@@ -1,3 +1,4 @@
+#![allow(clippy::needless_question_mark)]
 use itertools::Itertools;
 use recap::Recap;
 use serde::Deserialize;
@@ -123,7 +124,7 @@ fn do_round(monkeys: &mut Vec<Monkey>, reset_op: ResetOp) {
     }
 }
 
-fn calculate_monkey_business(monkeys: &Vec<Monkey>) -> usize {
+fn calculate_monkey_business(monkeys: &[Monkey]) -> usize {
     monkeys
         .iter()
         .map(|m| m.num_inspections)
@@ -164,7 +165,7 @@ pub fn main() {
     }
     println!("Part 1: {}", calculate_monkey_business(&monkeys_pt1));
 
-    let mut monkeys_pt2 = orig_monkeys.clone();
+    let mut monkeys_pt2 = orig_monkeys;
     let modulus: u64 = monkeys_pt2.iter().map(|m| m.test_divisible).product();
     for _ in 0..10000 {
         do_round(&mut monkeys_pt2, ResetOp::ModBy(modulus));

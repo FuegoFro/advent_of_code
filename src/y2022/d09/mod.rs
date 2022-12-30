@@ -25,7 +25,7 @@ fn calculate_tail(head: PointS, tail: PointS) -> PointS {
     tail
 }
 
-fn calculate_tail_positions(instructions: &Vec<(Delta, u32)>, rope_length: usize) -> usize {
+fn calculate_tail_positions(instructions: &[(Delta, u32)], rope_length: usize) -> usize {
     let mut rope = vec![PointS::ORIGIN; rope_length];
 
     let mut tail_squares = HashSet::new();

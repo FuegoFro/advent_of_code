@@ -166,7 +166,7 @@ struct Face<'a> {
 }
 
 impl<'a> Face<'a> {
-    fn new(source: Grid<Cell>, start: PointU, end: PointU, rotation: usize) -> Self {
+    fn new(_source: Grid<Cell>, _start: PointU, _end: PointU, _rotation: usize) -> Self {
         todo!()
     }
 }

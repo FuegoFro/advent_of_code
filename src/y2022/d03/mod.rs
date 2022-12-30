@@ -11,7 +11,7 @@ fn priority(c: char) -> u32 {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let bags = input
         .split('\n')
@@ -28,7 +28,7 @@ pub fn main() {
     let total: u32 = bags
         .iter()
         .map(|(a, b)| {
-            let common_keys = a.intersection(&b).collect_vec();
+            let common_keys = a.intersection(b).collect_vec();
             assert_eq!(common_keys.len(), 1);
             priority(*common_keys[0])
         })
@@ -43,8 +43,8 @@ pub fn main() {
         .map(|c| {
             let common_keys = c
                 .into_iter()
-                .map(|(a, b)| a.union(b).map(|c| *c).collect::<HashSet<_>>())
-                .reduce(|accum, item| accum.intersection(&item).map(|c| *c).collect())
+                .map(|(a, b)| a | b)
+                .reduce(|accum, item| &accum & &item)
                 .unwrap()
                 .into_iter()
                 .collect_vec();
