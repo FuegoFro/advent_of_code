@@ -81,15 +81,15 @@ fn print_points(points: &HashSet<Point>) {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let (points_raw, folds_raw) = input.split_once("\n\n").unwrap();
     let points = points_raw
-        .split("\n")
-        .map(|line| line.split_once(",").unwrap().map(p_i32))
+        .split('\n')
+        .map(|line| line.split_once(',').unwrap().map(p_i32))
         .map(|(x, y)| Point::new(x, y))
         .collect::<HashSet<_>>();
-    let folds = folds_raw.split("\n").map(Fold::from_str).collect_vec();
+    let folds = folds_raw.split('\n').map(Fold::from_str).collect_vec();
 
     let folded = fold_once(points.clone(), &folds[0]);
     // print_points(&folded);

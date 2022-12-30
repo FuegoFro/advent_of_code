@@ -24,12 +24,12 @@ impl Rule {
             let char = caps.name("char").unwrap().as_str().chars().next().unwrap();
             Rule::Literal(char)
         } else if re_sequence.is_match(packed) {
-            Rule::Sequence(packed.split(" ").map(p_u32).collect())
+            Rule::Sequence(packed.split(' ').map(p_u32).collect())
         } else if re_alternative.is_match(packed) {
             Rule::Alternative(
                 packed
                     .split(" | ")
-                    .map(|s| s.split(" ").map(p_u32).collect())
+                    .map(|s| s.split(' ').map(p_u32).collect())
                     .collect(),
             )
         } else {
@@ -75,7 +75,7 @@ pub fn main() {
     assert!(split.next().is_none());
 
     let rules = rules_raw
-        .split("\n")
+        .split('\n')
         .map(|l| {
             let mut splitn = l.splitn(2, ": ");
             let rule_num = splitn.next().map(p_u32).unwrap();
@@ -89,15 +89,15 @@ pub fn main() {
     let regex = ["^", &regex_for_rule(&mut memo, &rules, 0), "$"].join("");
     let rule_zero_regex = Regex::new(&regex).unwrap();
     let matching = messages
-        .split("\n")
+        .split('\n')
         .filter(|m| rule_zero_regex.is_match(m))
-        .collect::<Vec<_>>();
-    println!("{}", matching.len());
+        .count();
+    println!("{}", matching);
 
     let regex_42 = Regex::new(&format!("^{}", regex_for_rule(&mut memo, &rules, 42))).unwrap();
     let regex_31 = Regex::new(&format!("^{}", regex_for_rule(&mut memo, &rules, 31))).unwrap();
     let matching = messages
-        .split("\n")
+        .split('\n')
         .filter(|m| {
             let mut m = *m;
             let mut num_42_matches = 0;
@@ -115,6 +115,6 @@ pub fn main() {
                 && num_31_matches >= 1
                 && num_42_matches > num_31_matches
         })
-        .collect::<Vec<_>>();
-    println!("{}", matching.len());
+        .count();
+    println!("{}", matching);
 }

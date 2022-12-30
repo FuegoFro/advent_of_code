@@ -26,7 +26,7 @@ struct Instruction {
 
 impl Instruction {
     fn from_packed(packed: &str) -> Self {
-        let mut parts = packed.split(" ");
+        let mut parts = packed.split(' ');
         Instruction {
             op: Operation::from_packed(parts.next().unwrap()),
             arg: parts.next().unwrap().parse::<i32>().unwrap(),
@@ -42,8 +42,8 @@ impl Program {
     fn from_packed(packed: &str) -> Self {
         Program {
             instructions: packed
-                .split("\n")
-                .map(|l| Instruction::from_packed(l))
+                .split('\n')
+                .map(Instruction::from_packed)
                 .collect(),
         }
     }

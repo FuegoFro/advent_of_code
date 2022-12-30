@@ -1,5 +1,5 @@
-use itertools::{join, Itertools};
-use num_traits::{abs, abs_sub};
+use itertools::{Itertools};
+
 use util::p_i32;
 
 #[derive(Debug)]

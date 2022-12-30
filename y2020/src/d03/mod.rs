@@ -18,7 +18,7 @@ struct TreeGrid {
 impl TreeGrid {
     fn from_packed(packed: &str) -> Self {
         let rows = packed
-            .split("\n")
+            .split('\n')
             .map(|l| {
                 // TODO - Better error handling for unexpected inputs
                 l.chars().map(|c| c != '.').collect()
@@ -36,6 +36,7 @@ impl TreeGrid {
         let row = &self.rows[point.y];
         let col = row[point.x % row.len()];
 
+        #[allow(clippy::let_and_return)]
         col
     }
 }
@@ -67,7 +68,7 @@ pub fn main() {
 
             total
         })
-        .fold(1, |acc, x| acc * x);
+        .product::<i64>();
 
     println!("{}", result);
 }

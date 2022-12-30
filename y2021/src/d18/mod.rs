@@ -78,10 +78,7 @@ enum ExplodeResult {
 
 impl ExplodeResult {
     fn did_work(&self) -> bool {
-        match self {
-            Self::None => false,
-            _ => true,
-        }
+        !matches!(self, Self::None)
     }
 }
 
@@ -95,7 +92,7 @@ fn parse(s: &str) -> Node {
 
 fn parse_inner(s: &str) -> (usize, NodeValue) {
     // println!("Parse inner called with {}", s);
-    let first_char = s.chars().nth(0).unwrap();
+    let first_char = s.chars().next().unwrap();
     let (first_consumed, left) = match first_char {
         '[' => parse_inner(&s[1..]),
         '0'..='9' => return (1, NodeValue::Value(p_u32c(first_char))),
@@ -104,7 +101,7 @@ fn parse_inner(s: &str) -> (usize, NodeValue) {
     let s = &s[1 + first_consumed..];
     // println!("Parse inner first took {}, now has {}", first_consumed, s);
 
-    let middle_char = s.chars().nth(0).unwrap();
+    let middle_char = s.chars().next().unwrap();
     assert_eq!(middle_char, ',');
     let s = &s[1..];
     // println!("Parse inner after comma has {}", s);
@@ -112,7 +109,7 @@ fn parse_inner(s: &str) -> (usize, NodeValue) {
     let (second_consumed, right) = parse_inner(s);
     let s = &s[second_consumed..];
 
-    let last_char = s.chars().nth(0).unwrap();
+    let last_char = s.chars().next().unwrap();
     assert_eq!(last_char, ']');
 
     (
@@ -225,7 +222,7 @@ fn split_side(node: &mut Node, side_direction: Direction) -> bool {
     };
     match result {
         Some(value) => {
-            let odd_offset = if value.is_odd() { 1 } else { 0 };
+            let odd_offset = u32::from(value.is_odd());
             *side_direction.get_value_mut(node) = NodeValue::SubNode(Box::new(Node {
                 left: NodeValue::Value(value / 2),
                 right: NodeValue::Value(value / 2 + odd_offset),
@@ -308,7 +305,7 @@ fn add(a: &Node, b: &Node) -> Node {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     // test("[[[[[9,8],1],2],3],4]", "[[[[0,9],2],3],4]");
     // test("[7,[6,[5,[4,[3,2]]]]]", "[7,[6,[5,[7,0]]]]");
@@ -326,7 +323,7 @@ pub fn main() {
     //     "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]",
     // );
 
-    let numbers = input.split("\n").map(parse).collect_vec();
+    let numbers = input.split('\n').map(parse).collect_vec();
     let mut part1 = numbers.clone();
     let mut result = part1.remove(0);
     for number in part1 {

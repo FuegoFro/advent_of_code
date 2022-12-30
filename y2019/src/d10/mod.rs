@@ -105,7 +105,7 @@ pub fn main() {
     while destroyed.len() < 200 && destroyed.len() < asteroids.positions.len() - 1 {
         println!("!!!!!!! WAVE");
         let mut next_wave = asteroids
-            .visible_from(&station, &exclude)
+            .visible_from(station, &exclude)
             .into_iter()
             .map(|p| {
                 // Convert to angle from vertical

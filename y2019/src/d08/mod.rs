@@ -19,7 +19,7 @@ pub fn main() {
     pt2(&layers, width);
 }
 
-fn pt1(layers: &Vec<&[u8]>) {
+fn pt1(layers: &[&[u8]]) {
     let mut min_zeroes = usize::max_value();
     let mut min_layer_idx = usize::max_value();
 

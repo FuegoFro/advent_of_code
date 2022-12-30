@@ -10,8 +10,8 @@ pub fn main() {
         println!("{} -> {}", test, is_valid_password(test));
     }
 
-    let valid = (low..=high).filter(is_valid_password).collect::<Vec<_>>();
-    println!("{}", valid.len());
+    let valid = (low..=high).filter(is_valid_password).count();
+    println!("{}", valid);
 }
 
 fn is_valid_password(num: &i32) -> bool {

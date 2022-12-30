@@ -3,7 +3,7 @@ pub fn main() {
     let input = include_str!("actual_input.txt").trim();
 
     let mut nums = input
-        .split("\n")
+        .split('\n')
         .map(|l| l.parse::<usize>().unwrap())
         .collect::<Vec<_>>();
     nums.sort();
@@ -22,7 +22,7 @@ pub fn main() {
 
     println!("{}, {} -> {}", ones, threes, ones * threes);
 
-    let mut ways_to_get_joltage = vec![0 as usize; target + 1];
+    let mut ways_to_get_joltage = vec![0_usize; target + 1];
     ways_to_get_joltage[0] = 1;
     for adapter in &nums {
         let previous: usize = (1..=3)

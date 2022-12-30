@@ -19,9 +19,9 @@ fn simulate(mut fish_counts: HashMap<u32, u64>, days: usize) -> u64 {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
-    let fish = input.split(",").map(p_u32).collect_vec();
+    let fish = input.split(',').map(p_u32).collect_vec();
     let mut fish_counts = HashMap::new();
     for age in fish {
         *fish_counts.entry(age).or_insert(0u64) += 1;

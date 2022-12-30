@@ -4,12 +4,12 @@ pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
-    let mut parts = input.split("\n");
+    let mut parts = input.split('\n');
     let current_time = parts.next().map(p_u64).unwrap();
     let buses_raw = parts.next().unwrap();
 
     let (wait_time, bus_id) = buses_raw
-        .split(",")
+        .split(',')
         .filter(|id| *id != "x")
         .map(p_u64)
         .map(|id| (id - (current_time % id), id))
@@ -18,7 +18,7 @@ pub fn main() {
     println!("{} x {} = {}", bus_id, wait_time, bus_id * wait_time);
 
     let id_index_pairs = buses_raw
-        .split(",")
+        .split(',')
         .enumerate()
         .filter(|(_, id)| *id != "x")
         .map(|(i, id)| (p_u64(id), i as u64))

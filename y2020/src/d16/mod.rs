@@ -29,7 +29,7 @@ impl Field {
     }
 
     fn parse_range(packed: &str) -> RangeInclusive<u32> {
-        let mut parts = packed.split("-");
+        let mut parts = packed.split('-');
         let low = parts.next().map(p_u32).unwrap();
         let high = parts.next().map(p_u32).unwrap();
         assert!(parts.next().is_none());
@@ -48,25 +48,25 @@ struct Ticket {
 impl Ticket {
     fn from_packed(packed: &str) -> Self {
         Ticket {
-            values: packed.split(",").map(p_u32).collect(),
+            values: packed.split(',').map(p_u32).collect(),
         }
     }
 
-    fn invalid_values_sums(&self, fields: &Vec<Field>) -> u32 {
+    fn invalid_values_sums(&self, fields: &[Field]) -> u32 {
         self.values
             .iter()
             .filter(|v| !fields.iter().any(|f| f.is_valid(**v)))
             .sum()
     }
 
-    fn is_valid(&self, fields: &Vec<Field>) -> bool {
+    fn is_valid(&self, fields: &[Field]) -> bool {
         self.values
             .iter()
             .all(|v| fields.iter().any(|f| f.is_valid(*v)))
     }
 }
 
-fn pt1(fields: &Vec<Field>, nearby_tickets: &Vec<Ticket>) {
+fn pt1(fields: &[Field], nearby_tickets: &[Ticket]) {
     let invalid_sums: u32 = nearby_tickets
         .iter()
         .map(|t| t.invalid_values_sums(fields))
@@ -75,7 +75,7 @@ fn pt1(fields: &Vec<Field>, nearby_tickets: &Vec<Ticket>) {
     println!("{}", invalid_sums);
 }
 
-fn pt2(fields: &Vec<Field>, your_ticket: &Ticket, nearby_tickets: &Vec<Ticket>) {
+fn pt2(fields: &Vec<Field>, your_ticket: &Ticket, nearby_tickets: &[Ticket]) {
     let valid_tickets = nearby_tickets
         .iter()
         .filter(|t| t.is_valid(fields))
@@ -138,13 +138,13 @@ pub fn main() {
     let fields = input_parts
         .next()
         .unwrap()
-        .split("\n")
+        .split('\n')
         .map(Field::from_packed)
         .collect::<Vec<_>>();
     let your_ticket = input_parts
         .next()
         .unwrap()
-        .split("\n")
+        .split('\n')
         .skip(1)
         .map(Ticket::from_packed)
         .next()
@@ -152,7 +152,7 @@ pub fn main() {
     let nearby_tickets = input_parts
         .next()
         .unwrap()
-        .split("\n")
+        .split('\n')
         .skip(1)
         .map(Ticket::from_packed)
         .collect::<Vec<_>>();

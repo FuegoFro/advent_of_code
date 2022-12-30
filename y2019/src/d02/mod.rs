@@ -1,8 +1,10 @@
+#![allow(clippy::zero_prefixed_literal)]
+
 use crate::computer::Computer;
 
 pub fn main() {
     let input = include_str!("example_input.txt").trim();
-    for line in input.split("\n") {
+    for line in input.split('\n') {
         let mut computer_example = Computer::from_packed(line);
         computer_example.run().assert_finished();
         println!("{:?}", computer_example.memory());

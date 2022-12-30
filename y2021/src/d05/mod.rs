@@ -1,28 +1,33 @@
 use itertools::Itertools;
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::iter::repeat;
 use util::p_i32;
 use util::point::Point;
 
 fn str_to_point(s: &str) -> Point {
-    let (x, y) = s.split_once(",").unwrap();
+    let (x, y) = s.split_once(',').unwrap();
     Point::new(p_i32(x), p_i32(y))
 }
 
 fn make_point_iter(start: i32, end: i32) -> Box<dyn Iterator<Item = i32>> {
-    if start == end {
-        // println!("    Repeating {}", start);
-        Box::new(repeat(start))
-    } else if start < end {
-        // println!("    Range {}..={}", start, end);
-        Box::new(start..=end)
-    } else {
-        // println!("    Range {}..={}", end, start);
-        Box::new((end..=start).rev())
+    match start.cmp(&end) {
+        Ordering::Equal => {
+            // println!("    Repeating {}", start);
+            Box::new(repeat(start))
+        }
+        Ordering::Less => {
+            // println!("    Range {}..={}", start, end);
+            Box::new(start..=end)
+        }
+        Ordering::Greater => {
+            // println!("    Range {}..={}", end, start);
+            Box::new((end..=start).rev())
+        }
     }
 }
 
-fn get_num_overlapped(starts_and_ends: &Vec<(Point, Point)>, ignore_diagonal: bool) -> usize {
+fn get_num_overlapped(starts_and_ends: &[(Point, Point)], ignore_diagonal: bool) -> usize {
     let mut seen_points = HashMap::new();
     for (start, end) in starts_and_ends.iter() {
         // println!("Have points {:?} -> {:?}", start, end);
@@ -42,10 +47,10 @@ fn get_num_overlapped(starts_and_ends: &Vec<(Point, Point)>, ignore_diagonal: bo
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let starts_and_ends = input
-        .split("\n")
+        .split('\n')
         .map(|line| {
             let (start_raw, end_raw) = line.split_once(" -> ").unwrap();
             (str_to_point(start_raw), str_to_point(end_raw))

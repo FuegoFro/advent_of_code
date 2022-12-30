@@ -1,13 +1,11 @@
 use itertools::Itertools;
-use num::integer::lcm;
-use num::Integer;
-use std::cmp::{max, min};
+
+use std::cmp::max;
 use std::collections::{HashMap, HashSet};
-use std::iter::{Cycle, Map};
-use std::str::{Chars, Split};
+
 use std::time::Instant;
 use util::grid::Grid;
-use util::point2::{Delta, PointS, PointU};
+use util::point2::PointU;
 
 const WIDTH: usize = 7;
 const STABLE_BLOCK_SIZE_HEURISTIC: usize = 5;
@@ -81,6 +79,7 @@ fn settle(taken_spaces: &mut HashSet<PointU>, origin: &PointU, rock: &Rock) {
     }
 }
 
+#[allow(dead_code)]
 fn render(top: usize, taken: &HashSet<PointU>) {
     let mut grid = Grid::empty(7, top);
     for x in 0..7 {

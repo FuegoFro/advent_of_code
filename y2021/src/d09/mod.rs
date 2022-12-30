@@ -10,7 +10,7 @@ const OFFSETS: [Point; 4] = [
     Point::new(0, -1),
 ];
 
-fn get_neighbors(nums: &Vec<Vec<u32>>, p: Point) -> Vec<(Point, u32)> {
+fn get_neighbors(nums: &[Vec<u32>], p: Point) -> Vec<(Point, u32)> {
     OFFSETS
         .iter()
         .map(|o| o + p)
@@ -18,7 +18,7 @@ fn get_neighbors(nums: &Vec<Vec<u32>>, p: Point) -> Vec<(Point, u32)> {
         .flat_map(|p| {
             nums.get(p.y as usize)
                 .and_then(|row| row.get(p.x as usize))
-                .and_then(|value| Some((p, *value)))
+                .map(|value| (p, *value))
         })
         .collect_vec()
 }
@@ -64,11 +64,11 @@ fn get_basin_sizes_product(nums: &Vec<Vec<u32>>) -> i32 {
 }
 
 pub fn main() {
-    let input = include_str!("example_input.txt").trim().replace("\r", "");
+    let input = include_str!("example_input.txt").trim().replace('\r', "");
     // let input = include_str!("actual_input.txt").trim().replace("\r", "");
 
     let nums = input
-        .split("\n")
+        .split('\n')
         .map(|l| l.chars().map(p_u32c).collect_vec())
         .collect_vec();
 

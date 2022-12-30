@@ -1,6 +1,6 @@
 use itertools::Itertools;
 use std::collections::HashSet;
-use std::ops::Sub;
+
 use util::p_i32;
 use util::point3::{BoundingBox, Delta3, Point3};
 

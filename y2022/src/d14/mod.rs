@@ -1,10 +1,9 @@
 use itertools::Itertools;
 use std::fmt::{Debug, Formatter, Write};
-use std::io::BufRead;
 use tuple::Map;
 use util::grid::Grid;
+use util::p_usize;
 use util::point2::{Delta, PointU};
-use util::{p_u32, p_usize};
 
 #[derive(Eq, PartialEq, Clone)]
 enum State {

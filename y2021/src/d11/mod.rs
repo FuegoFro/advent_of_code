@@ -39,7 +39,7 @@ fn run_cycle(grid: &mut Grid<u32>) -> usize {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let initial_grid = Grid::from_str(input, "\n", None, p_u32);
 
@@ -47,7 +47,7 @@ pub fn main() {
     let total: usize = (0..100).map(|_| run_cycle(&mut part1)).sum();
     println!("Part 1: {}", total);
 
-    let mut part2 = initial_grid.clone();
+    let mut part2 = initial_grid;
     let mut steps = 1;
     while run_cycle(&mut part2) != 100 {
         steps += 1;

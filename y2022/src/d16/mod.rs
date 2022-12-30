@@ -4,10 +4,10 @@ use itertools::Itertools;
 use priority_queue::PriorityQueue;
 use recap::Recap;
 use serde::Deserialize;
-use std::cmp::max;
+
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fmt::{Display, Formatter};
-use std::time::{Duration, Instant};
+use std::time::{Instant};
 
 #[derive(Deserialize, Recap, Debug)]
 #[recap(

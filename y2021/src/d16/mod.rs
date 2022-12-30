@@ -98,11 +98,7 @@ fn sum_version_numbers(packet: &Packet) -> u64 {
 
 fn bool_op(evaluated: impl Iterator<Item = u64>, operator: impl FnOnce(&u64, &u64) -> bool) -> u64 {
     let (first, second) = evaluated.collect_tuple::<(u64, u64)>().unwrap();
-    if operator(&first, &second) {
-        1
-    } else {
-        0
-    }
+    u64::from(operator(&first, &second))
 }
 
 fn evaluate(packet: &Packet) -> u64 {
@@ -128,7 +124,7 @@ fn evaluate(packet: &Packet) -> u64 {
 // TODO - Use proper Results.
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let bytes = hex::decode(input).unwrap();
     let packet = parse_packet(&mut BitReader::new(&bytes));

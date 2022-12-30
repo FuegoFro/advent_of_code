@@ -55,9 +55,9 @@ fn points_for_remaining_closers(closers: Vec<char>) -> u64 {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
-    let lines = input.split("\n");
+    let lines = input.split('\n');
 
     let total_syntax_error_score: u64 = lines
         .clone()

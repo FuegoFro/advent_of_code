@@ -39,22 +39,22 @@ fn decode_entry((signals, queries): &(Vec<&str>, Vec<&str>)) -> u32 {
         (8, &signals_by_length[&7][0]),
     ]);
     for len_6 in &signals_by_length[&6] {
-        if signals_by_digit[&4].is_subset(&len_6) {
-            signals_by_digit.insert(9, &len_6);
-        } else if signals_by_digit[&1].is_subset(&len_6) {
-            signals_by_digit.insert(0, &len_6);
+        if signals_by_digit[&4].is_subset(len_6) {
+            signals_by_digit.insert(9, len_6);
+        } else if signals_by_digit[&1].is_subset(len_6) {
+            signals_by_digit.insert(0, len_6);
         } else {
-            signals_by_digit.insert(6, &len_6);
+            signals_by_digit.insert(6, len_6);
         }
     }
     // Note relies on entry for 9 existing, which is done in the len_6 block above.
     for len_5 in &signals_by_length[&5] {
-        if signals_by_digit[&7].is_subset(&len_5) {
-            signals_by_digit.insert(3, &len_5);
-        } else if len_5.is_subset(&signals_by_digit[&9]) {
-            signals_by_digit.insert(5, &len_5);
+        if signals_by_digit[&7].is_subset(len_5) {
+            signals_by_digit.insert(3, len_5);
+        } else if len_5.is_subset(signals_by_digit[&9]) {
+            signals_by_digit.insert(5, len_5);
         } else {
-            signals_by_digit.insert(2, &len_5);
+            signals_by_digit.insert(2, len_5);
         }
     }
 
@@ -76,16 +76,16 @@ fn decode_entry((signals, queries): &(Vec<&str>, Vec<&str>)) -> u32 {
 }
 
 pub fn main() {
-    let input = include_str!("example_input.txt").trim().replace("\r", "");
+    let input = include_str!("example_input.txt").trim().replace('\r', "");
     // let input = include_str!("actual_input.txt").trim().replace("\r", "");
 
     let raw_entries = input
-        .split("\n")
+        .split('\n')
         .map(|entry| {
             entry
                 .split_once(" | ")
                 .unwrap()
-                .map(|part| part.split(" ").collect_vec())
+                .map(|part| part.split(' ').collect_vec())
         })
         .collect_vec();
 

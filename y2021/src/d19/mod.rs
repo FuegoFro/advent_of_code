@@ -127,12 +127,12 @@ where
 
 fn canonical_points_from_deltas(
     canonical_point_deltas: &PointDeltas,
-    points: &Vec<Point3>,
+    points: &[Point3],
 ) -> Option<(Vec<Point3>, Delta3)> {
     for rotation in Rotation::ALL_ALIGNED.iter() {
         let other_point_deltas = build_deltas(points.iter(), rotation);
         // print_deltas("other", &other_point_deltas);
-        let point_mappings = correlate_points(&canonical_point_deltas, &other_point_deltas);
+        let point_mappings = correlate_points(canonical_point_deltas, &other_point_deltas);
         if point_mappings.len() >= MIN_CORRELATION_COUNT {
             let translation = calculate_translation(point_mappings);
             let translated_points = other_point_deltas
@@ -205,16 +205,16 @@ fn print_deltas(name: &str, point_deltas: &PointDeltas) {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let sensor_values = input
         .split("\n\n")
         .map(|block| {
             block
-                .split("\n")
+                .split('\n')
                 .skip(1)
                 .map(|line| {
-                    line.split(",")
+                    line.split(',')
                         .map(p_i32)
                         .collect_tuple::<(_, _, _)>()
                         .map(|(x, y, z)| Point3::new(x, y, z))

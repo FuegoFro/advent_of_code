@@ -40,7 +40,7 @@ pub fn main() {
     println!("{}", robot.hull.len());
 
     let robot = run_painter(input, 1);
-    let (origin, opposite_corner) = get_bounding_box(robot.hull.iter().map(|(p, _)| p));
+    let (origin, opposite_corner) = get_bounding_box(robot.hull.keys());
     let size = opposite_corner - origin + Point::new(1, 1);
 
     let mut grid = vec![vec![false; size.x as usize]; size.y as usize];

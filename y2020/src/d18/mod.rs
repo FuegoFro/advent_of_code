@@ -48,12 +48,12 @@ pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
-    let total: u64 = input.split("\n").map(|l| eval_expr(&mut l.chars())).sum();
+    let total: u64 = input.split('\n').map(|l| eval_expr(&mut l.chars())).sum();
     println!("{}", total);
 
     let plus_precedence_parser = plus_precedence::ExprParser::new();
     let total_plus_precedence: u64 = input
-        .split("\n")
+        .split('\n')
         .map(|l| plus_precedence_parser.parse(l).unwrap())
         .sum();
     println!("{}", total_plus_precedence);

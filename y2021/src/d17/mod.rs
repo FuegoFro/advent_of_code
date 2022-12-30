@@ -62,12 +62,11 @@ fn get_max_height_for_initial_velocity(initial_velocity: i32) -> i32 {
 ///
 /// Doesn't handle negative target area x
 fn valid_horizontal_velocities_for_step(target_step: u32, target_area: &TargetArea) -> Vec<i32> {
-    let mut next_initial_velocity = 0;
     let mut valid_horizontal_velocities = vec![];
     // Kinda arbitrary, probably enough iterations.
-    for _ in 0..=(target_area.x_end * 10) {
+    for (next_initial_velocity, _) in (0..=(target_area.x_end * 10)).enumerate() {
         let mut position = 0;
-        let mut velocity = next_initial_velocity;
+        let mut velocity = next_initial_velocity as i32;
         for _ in 0..=target_step {
             position += velocity;
             if velocity > 0 {
@@ -75,16 +74,15 @@ fn valid_horizontal_velocities_for_step(target_step: u32, target_area: &TargetAr
             }
         }
         if target_area.x_start <= position && position <= target_area.x_end {
-            valid_horizontal_velocities.push(next_initial_velocity);
+            valid_horizontal_velocities.push(next_initial_velocity as i32);
         }
-        next_initial_velocity += 1;
     }
     valid_horizontal_velocities
 }
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let target_area: TargetArea = input.parse().unwrap();
 

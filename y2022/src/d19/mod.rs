@@ -3,11 +3,11 @@ use itertools::Itertools;
 use priority_queue::PriorityQueue;
 use recap::Recap;
 use serde::Deserialize;
-use std::cmp::max;
-use std::collections::{BTreeMap, HashMap, HashSet, VecDeque};
+
+use std::collections::{HashSet};
 use std::panic;
 use std::time::Instant;
-use util::{p_u32, split_once};
+use util::{p_u32};
 
 #[derive(Clone, Copy, Debug, Hash, Ord, PartialOrd, Eq, PartialEq)]
 enum Resource {

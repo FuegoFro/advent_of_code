@@ -55,7 +55,7 @@ fn get_draw_instructions(computer: &mut Computer) -> Vec<DrawInstruction> {
 
 const SCORE_COORDINATE: Point = Point::new(-1, 0);
 
-fn render_screen(computer: &mut Computer, screen: &mut Vec<Vec<Tile>>, do_print: bool) {
+fn render_screen(computer: &mut Computer, screen: &mut [Vec<Tile>], do_print: bool) {
     let mut score = 0;
     for instruction in get_draw_instructions(computer).into_iter() {
         match instruction.value {
@@ -77,7 +77,7 @@ fn render_screen(computer: &mut Computer, screen: &mut Vec<Vec<Tile>>, do_print:
     }
 }
 
-fn get_move(screen: &Vec<Vec<Tile>>) -> Word {
+fn get_move(screen: &[Vec<Tile>]) -> Word {
     let mut ball_coords: Option<Point> = None;
     let mut paddle_coords: Option<Point> = None;
     for (y, row) in screen.iter().enumerate() {

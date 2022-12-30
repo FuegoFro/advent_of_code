@@ -46,8 +46,8 @@ mod seats {
     impl Seats {
         pub fn from_packed(packed: &str) -> Self {
             let seats: Vec<_> = packed
-                .split("\n")
-                .map(|l| l.chars().map(|c| SeatState::from_packed(c)).collect())
+                .split('\n')
+                .map(|l| l.chars().map(SeatState::from_packed).collect())
                 .collect();
             Seats {
                 current: seats.clone(),
@@ -100,14 +100,14 @@ mod seats {
             NEIGHBOR_DIRECTIONS
                 .iter()
                 .map(|d| {
-                    let mut neighbor = &point + d;
+                    let mut neighbor = point + d;
                     while let Some(s) = self.get(neighbor) {
                         match s {
                             SeatState::Floor => neighbor += d,
                             _ => return s.occupied_count(),
                         }
                     }
-                    return 0;
+                    0
                 })
                 .sum()
         }
@@ -124,7 +124,7 @@ mod seats {
                     };
                     print!("{}", c)
                 }
-                print!("\n")
+                println!()
             }
         }
 

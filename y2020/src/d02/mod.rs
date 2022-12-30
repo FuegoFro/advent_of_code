@@ -44,7 +44,7 @@ pub fn main() {
     let passwords = include_str!("target_passwords.txt").trim();
 
     let num_valid = passwords
-        .split("\n")
+        .split('\n')
         .map(|line| Password::from_packed(line).unwrap())
         .filter(|password| password.is_valid_new())
         .count();

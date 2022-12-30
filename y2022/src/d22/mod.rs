@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use recap::Recap;
+
 use std::fmt::{Debug, Formatter, Write};
 use util::grid::Grid;
 use util::point2::{Delta, PointU};
@@ -157,19 +157,19 @@ F = 2r90
 
 // fn grid_point_rotated()
 
-struct Face<'a> {
-    orig_start: PointU,
-    orig_rotation: usize,
-    data: Grid<Cell>,
-    /// up, right, down, left
-    connections: Vec<(&'a Face<'a>, usize)>,
-}
-
-impl<'a> Face<'a> {
-    fn new(_source: Grid<Cell>, _start: PointU, _end: PointU, _rotation: usize) -> Self {
-        todo!()
-    }
-}
+// struct Face<'a> {
+//     orig_start: PointU,
+//     orig_rotation: usize,
+//     data: Grid<Cell>,
+//     /// up, right, down, left
+//     connections: Vec<(&'a Face<'a>, usize)>,
+// }
+//
+// impl<'a> Face<'a> {
+//     fn new(_source: Grid<Cell>, _start: PointU, _end: PointU, _rotation: usize) -> Self {
+//         todo!()
+//     }
+// }
 
 // Extract from original data
 // Connect

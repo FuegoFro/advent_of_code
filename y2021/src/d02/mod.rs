@@ -21,7 +21,7 @@ impl Direction {
 }
 
 fn parse_line(line: &str) -> (Direction, i32) {
-    let (first, second) = line.split_once(" ").unwrap();
+    let (first, second) = line.split_once(' ').unwrap();
     (Direction::from_str(first), p_i32(second))
 }
 
@@ -29,7 +29,7 @@ pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
-    let directions = input.split("\n").map(parse_line).collect_vec();
+    let directions = input.split('\n').map(parse_line).collect_vec();
 
     // P1
     let mut current_pos = Point::new(0, 0);
@@ -47,7 +47,7 @@ pub fn main() {
     // P2
     let mut current_pos = Point::new(0, 0);
     let mut heading = 0;
-    for (direction, amount) in directions.clone() {
+    for (direction, amount) in directions {
         match direction {
             Direction::Down => heading += amount,
             Direction::Up => heading -= amount,

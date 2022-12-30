@@ -3,7 +3,7 @@ use itertools::Itertools;
 use recap::Recap;
 use serde::Deserialize;
 use std::collections::HashSet;
-use util::point2::{PointS, PointU};
+use util::point2::{PointS};
 
 #[derive(Deserialize, Recap)]
 #[recap(

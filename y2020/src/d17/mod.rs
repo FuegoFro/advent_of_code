@@ -16,13 +16,7 @@ impl BoardLayer {
     fn count_active(&self) -> u32 {
         match self {
             Dimension(children) => children.iter().map(|c| c.count_active()).sum(),
-            BoardLayer::Value(v) => {
-                if *v {
-                    1
-                } else {
-                    0
-                }
-            }
+            BoardLayer::Value(v) => u32::from(*v),
         }
     }
 }
@@ -37,7 +31,7 @@ impl Board {
     fn from_packed(packed: &str, dimensions: usize, max_cycles: usize) -> Self {
         assert!(dimensions >= 2);
         let initial_plane = packed
-            .split("\n")
+            .split('\n')
             .map(|l| {
                 l.chars()
                     .map(|c| match c {
@@ -206,7 +200,7 @@ impl Board {
                     };
                     print!("{}", c)
                 }
-                print!("\n")
+                println!()
             }
         } else {
             match layer {

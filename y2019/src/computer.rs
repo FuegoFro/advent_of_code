@@ -116,7 +116,7 @@ const OP_PAIRS: &[(u8, Operation)] = &[
                 let (operand1, operand2, dst) = unpack_params_3(parameters);
                 let operand1 = computer.read_param(operand1);
                 let operand2 = computer.read_param(operand2);
-                let value = if operand1 < operand2 { 1 } else { 0 };
+                let value = i64::from(operand1 < operand2);
                 computer.write_param(dst, value);
                 None
             },
@@ -130,7 +130,7 @@ const OP_PAIRS: &[(u8, Operation)] = &[
                 let (operand1, operand2, dst) = unpack_params_3(parameters);
                 let operand1 = computer.read_param(operand1);
                 let operand2 = computer.read_param(operand2);
-                let value = if operand1 == operand2 { 1 } else { 0 };
+                let value = i64::from(operand1 == operand2);
                 computer.write_param(dst, value);
                 None
             },
@@ -165,7 +165,7 @@ lazy_static! {
     static ref OPS: HashMap<u8, Operation> = OP_PAIRS.iter().cloned().collect();
 }
 
-fn unpack_params_0(parameters: &[Parameter]) -> () {
+fn unpack_params_0(parameters: &[Parameter]) {
     assert_eq!(parameters.len(), 0);
 }
 
@@ -250,7 +250,7 @@ pub struct Computer {
 impl Computer {
     pub fn from_packed(packed: &str) -> Self {
         Self {
-            memory: Memory::new(packed.split(",").map(|d| d.parse().expect(d)).collect()),
+            memory: Memory::new(packed.split(',').map(|d| d.parse().expect(d)).collect()),
             relative_base: 0,
             instruction_pointer: 0,
             terminated: false,

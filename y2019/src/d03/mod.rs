@@ -5,7 +5,7 @@ fn visited_locations(path: &str) -> HashMap<Point, u32> {
     let mut locations = HashMap::new();
     let mut current = Point { x: 0, y: 0 };
     let mut num_steps = 0;
-    for (direction, count) in path.split(",").map(|p| p.split_at(1)) {
+    for (direction, count) in path.split(',').map(|p| p.split_at(1)) {
         let count = count.parse::<i32>().unwrap();
         let direction = match direction {
             "L" => Point { x: -1, y: 0 },
@@ -27,7 +27,7 @@ pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
-    let mut split = input.split("\n").map(visited_locations);
+    let mut split = input.split('\n').map(visited_locations);
     let a = split.next().unwrap();
     let b = split.next().unwrap();
     assert!(split.next().is_none());

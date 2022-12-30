@@ -7,7 +7,7 @@ pub fn main() {
     let buffer = 25;
 
     let numbers = input
-        .split("\n")
+        .split('\n')
         .map(|l| l.parse::<i64>().unwrap())
         .collect::<Vec<_>>();
 
@@ -21,7 +21,7 @@ pub fn main() {
     );
 }
 
-fn find_weak_number(buffer: usize, numbers: &Vec<i64>) -> i64 {
+fn find_weak_number(buffer: usize, numbers: &[i64]) -> i64 {
     let mut numbers = numbers.iter();
     let mut valid_previous = (0..buffer)
         .map(|_| numbers.next().unwrap())

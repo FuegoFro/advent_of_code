@@ -13,9 +13,9 @@ impl Board {
     fn from_str(s: &str) -> Self {
         let mut has_number = vec![];
         let mut number_positions = HashMap::new();
-        for (y, line) in s.split("\n").enumerate() {
+        for (y, line) in s.split('\n').enumerate() {
             let mut has_number_row = vec![];
-            for (x, num) in line.trim().split_whitespace().map(p_u32).enumerate() {
+            for (x, num) in line.split_whitespace().map(p_u32).enumerate() {
                 has_number_row.push(false);
                 number_positions.insert(num, Point::new(x as i32, y as i32));
             }
@@ -57,7 +57,7 @@ impl Board {
     }
 }
 
-fn play_game(numbers: &Vec<u32>, mut boards: Vec<Board>, get_first_win: bool) -> (Board, u32) {
+fn play_game(numbers: &[u32], mut boards: Vec<Board>, get_first_win: bool) -> (Board, u32) {
     for num in numbers.iter() {
         let mut winning_boards = vec![];
         let mut non_winning_boards = vec![];
@@ -85,15 +85,15 @@ fn play_game(numbers: &Vec<u32>, mut boards: Vec<Board>, get_first_win: bool) ->
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let (raw_numbers, raw_boards) = input.split_once("\n\n").unwrap();
-    let numbers = raw_numbers.split(",").map(p_u32).collect_vec();
+    let numbers = raw_numbers.split(',').map(p_u32).collect_vec();
     let boards = raw_boards.split("\n\n").map(Board::from_str).collect_vec();
 
     let (completed_board, final_num) = play_game(&numbers, boards.clone(), true);
     println!("Part 1: {}", completed_board.compute_score(final_num));
 
-    let (completed_board, final_num) = play_game(&numbers, boards.clone(), false);
+    let (completed_board, final_num) = play_game(&numbers, boards, false);
     println!("Part 2: {}", completed_board.compute_score(final_num));
 }

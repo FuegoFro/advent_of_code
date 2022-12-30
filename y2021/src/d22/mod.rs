@@ -303,10 +303,10 @@ fn run_sequence(modifications: Vec<Modification>, only_initial: bool) -> OctTree
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let modifications = input
-        .split("\n")
+        .split('\n')
         .map(|l| l.parse::<Instruction>().unwrap())
         .map(Modification::from_instruction)
         .collect_vec();
@@ -330,7 +330,7 @@ pub fn main() {
     );
     println!(
         "Part 2: {}",
-        run_sequence(modifications.clone(), false).total_volume()
+        run_sequence(modifications, false).total_volume()
     );
 }
 

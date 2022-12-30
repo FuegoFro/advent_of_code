@@ -5,7 +5,7 @@ pub fn main() {
     // let input = include_str!("example_input.txt").trim();
     let input = include_str!("actual_input.txt").trim();
 
-    let mut numbers = input.split(",").map(p_u32).collect::<Vec<_>>();
+    let mut numbers = input.split(',').map(p_u32).collect::<Vec<_>>();
     let mut most_recent = numbers[0..(numbers.len() - 1)]
         .iter()
         .enumerate()

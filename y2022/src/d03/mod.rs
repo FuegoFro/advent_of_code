@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashSet};
 
 fn priority(c: char) -> u32 {
     match c {

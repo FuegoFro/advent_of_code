@@ -6,7 +6,7 @@ pub fn main() {
     let input = include_str!("actual_input.txt").trim();
 
     let bag_graph = input
-        .split("\n")
+        .split('\n')
         .map(|l| {
             lazy_static! {
                 static ref RE_RULE: Regex =

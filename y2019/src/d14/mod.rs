@@ -62,7 +62,7 @@ fn get_lower_upper_bounds(recipes: &HashMap<&str, Recipe>) -> (u64, u64) {
     let mut prev_fuel = 1;
     loop {
         let current_fuel = prev_fuel * 2;
-        let current_ore = get_ore_needed_for_fuel(&recipes, current_fuel);
+        let current_ore = get_ore_needed_for_fuel(recipes, current_fuel);
         if current_ore >= 1000000000000 {
             return (prev_fuel, current_fuel);
         }

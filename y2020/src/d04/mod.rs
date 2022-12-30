@@ -28,13 +28,15 @@ fn is_valid_hair_color(color: &Option<String>) -> bool {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"^#[0-9a-f]{6}$").unwrap();
     }
-    color.as_ref().map_or(false, |color| RE.is_match(&color))
+    color.as_ref().map_or(false, |color| RE.is_match(color))
 }
 
 fn is_valid_eye_color(color: &Option<String>) -> bool {
-    color.as_ref().map_or(false, |color| match color.as_ref() {
-        "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth" => true,
-        _ => false,
+    color.as_ref().map_or(false, |color| {
+        matches!(
+            color.as_ref(),
+            "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth"
+        )
     })
 }
 
@@ -42,7 +44,7 @@ fn is_valid_id(id: &Option<String>) -> bool {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"^\d{9}$").unwrap();
     }
-    id.as_ref().map_or(false, |id| RE.is_match(&id))
+    id.as_ref().map_or(false, |id| RE.is_match(id))
 }
 
 #[derive(Default, Debug)]
@@ -62,7 +64,7 @@ impl Passport {
         let mut passport = Passport::default();
 
         for raw_field in packed.split_ascii_whitespace() {
-            let mut split = raw_field.splitn(2, ":");
+            let mut split = raw_field.splitn(2, ':');
             let key = split.next().expect(raw_field);
             let value = Some(split.next().expect(raw_field).to_owned());
             match key {
@@ -109,7 +111,7 @@ pub fn main() {
 
     let num_valid = input
         .split("\n\n")
-        .map(|i| Passport::from_packed(i))
+        .map(Passport::from_packed)
         .filter(|p| p.is_valid_passport_pt2())
         .count();
 

@@ -74,7 +74,7 @@ fn do_time_step(grid: Grid<Spot>) -> (Grid<Spot>, bool) {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let mut grid = Grid::from_str(input, "\n", None, Spot::from_str);
 

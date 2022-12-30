@@ -21,7 +21,7 @@ pub fn main() {
     let input = include_str!("actual_input.txt").trim();
 
     let total_fuel: i32 = input
-        .split("\n")
+        .split('\n')
         .map(|l| l.parse::<i32>().unwrap())
         .map(calc_fuel_total)
         .sum();

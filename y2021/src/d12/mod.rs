@@ -40,7 +40,7 @@ fn dfs_all_paths_recursive<'container, 'node: 'container>(
 
     // Visit all reachable
     // TODO - Can this state (insert then remove) be better encoded in the type system?
-    if is_small_cave(&current_node) && !is_revisiting_small_cave {
+    if is_small_cave(current_node) && !is_revisiting_small_cave {
         visited_small_caves.insert(current_node);
     }
     for reachable in graph[current_node].iter() {
@@ -54,7 +54,7 @@ fn dfs_all_paths_recursive<'container, 'node: 'container>(
         );
         path_so_far.pop();
     }
-    if is_small_cave(&current_node) && !is_revisiting_small_cave {
+    if is_small_cave(current_node) && !is_revisiting_small_cave {
         visited_small_caves.remove(&current_node);
     }
 }
@@ -74,11 +74,11 @@ fn dfs_all_paths(graph: &HashMap<&str, Vec<&str>>, allow_two_small_cave_visits: 
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let graph = input
-        .split("\n")
-        .map(|line| line.split_once("-").unwrap())
+        .split('\n')
+        .map(|line| line.split_once('-').unwrap())
         // Expand with both forwards and backwards links
         .flat_map(|(a, b)| [(a, b), (b, a)].into_iter())
         .into_group_map();

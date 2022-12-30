@@ -1,6 +1,6 @@
 use itertools::Itertools;
 use skiplist::SkipList;
-use std::collections::HashSet;
+
 use util::p_i64;
 
 fn decrypt_key(mut list: SkipList<(usize, i64)>, num_rounds: usize) -> i64 {

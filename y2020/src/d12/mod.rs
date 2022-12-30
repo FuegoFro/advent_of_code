@@ -141,14 +141,14 @@ pub fn main() {
 
     let mut ferry = FerryPt1::new();
     input
-        .split("\n")
+        .split('\n')
         .map(Instruction::from_packed)
         .for_each(|i| ferry.do_instruction(i));
     println!("{} ({:?})", ferry.position.l1_dist(), ferry.position);
 
     let mut ferry = FerryPt2::new();
     input
-        .split("\n")
+        .split('\n')
         .map(Instruction::from_packed)
         .for_each(|i| ferry.do_instruction(i));
     println!("{} ({:?})", ferry.position.l1_dist(), ferry.position);

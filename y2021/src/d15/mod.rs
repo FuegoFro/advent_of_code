@@ -81,7 +81,7 @@ fn make_expanded_grid(orig_grid: &Grid<u32>) -> Grid<u32> {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let grid = Grid::from_str(input, "\n", None, p_u32);
 

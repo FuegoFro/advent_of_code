@@ -42,7 +42,7 @@ where
             "w" | "x" | "y" | "z" => Argument::Var(s.into()),
             _ => Argument::Num(
                 s.parse()
-                    .expect(&format!("Expected variable or integer literal, got {}", s)),
+                    .unwrap_or_else(|_| panic!("Expected variable or integer literal, got {}", s)),
             ),
         }
     }
@@ -211,7 +211,6 @@ impl State {
             Instruction::Div(var, arg) => {
                 let resolved = self.resolve(arg);
                 if self[var] == ZERO {
-                    return;
                 } else if resolved == ZERO {
                     panic!("Divide by zero");
                 } else if resolved != ONE {
@@ -221,7 +220,6 @@ impl State {
             Instruction::Mod(var, arg) => {
                 let resolved = self.resolve(arg);
                 if self[var] == ZERO {
-                    return;
                 } else if resolved == ZERO {
                     panic!("Mod by zero");
                 } else if resolved != ONE {
@@ -233,12 +231,8 @@ impl State {
                 if self[var] == resolved {
                     self[var] = ONE.clone();
                 } else {
-                    self[var] = Expression::new_op(
-                        &self[var],
-                        "==",
-                        |l, r| if l == r { 1 } else { 0 },
-                        &resolved,
-                    )
+                    self[var] =
+                        Expression::new_op(&self[var], "==", |l, r| i32::from(l == r), &resolved)
                 }
             }
         }
@@ -247,7 +241,7 @@ impl State {
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let _ = input;
     // symbolically_execute_program(input);
@@ -260,7 +254,7 @@ pub fn main() {
 #[allow(dead_code)]
 fn symbolically_execute_program(input: String) {
     let mut state = State::new();
-    for instr_str in input.split("\n") {
+    for instr_str in input.split('\n') {
         println!("Running instr '{}'", instr_str);
         state.run_instruction(Instruction::from_str(instr_str));
         // println!("w={}", state.w);
@@ -389,13 +383,10 @@ fn try_find_smallest_number() -> String {
 }
 
 fn neq(left: i32, right: i32) -> i32 {
-    if left != right {
-        1
-    } else {
-        0
-    }
+    i32::from(left != right)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn is_valid(
     i0: i32,
     i1: i32,

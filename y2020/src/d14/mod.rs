@@ -21,8 +21,8 @@ mod pt1 {
             if let Some(mask_caps) = re_mask.captures(packed) {
                 let mask_raw = mask_caps.name("mask").unwrap().as_str();
                 Instruction::SetMask {
-                    and_mask: u64::from_str_radix(&mask_raw.replace("X", "1"), 2).unwrap(),
-                    or_mask: u64::from_str_radix(&mask_raw.replace("X", "0"), 2).unwrap(),
+                    and_mask: u64::from_str_radix(&mask_raw.replace('X', "1"), 2).unwrap(),
+                    or_mask: u64::from_str_radix(&mask_raw.replace('X', "0"), 2).unwrap(),
                 }
             } else if let Some(mem_caps) = re_mem.captures(packed) {
                 Instruction::SetMemory {
@@ -64,7 +64,7 @@ mod pt1 {
     pub fn do_pt1(input: &str) {
         let mut program = Program::default();
         input
-            .split("\n")
+            .split('\n')
             .map(Instruction::from_packed)
             .for_each(|i| program.execute_instruction(i));
         println!("{}", program.sum_memory());
@@ -101,7 +101,7 @@ mod pt2 {
             if let Some(mask_caps) = re_mask.captures(packed) {
                 let mask_raw = mask_caps.name("mask").unwrap().as_str();
                 Instruction::SetMask {
-                    base_mask: u64::from_str_radix(&mask_raw.replace("X", "0"), 2).unwrap(),
+                    base_mask: u64::from_str_radix(&mask_raw.replace('X', "0"), 2).unwrap(),
                     floating_bits: mask_raw
                         .chars()
                         .enumerate()
@@ -139,7 +139,7 @@ mod pt2 {
                 }
                 Instruction::SetMemory { address, value } => {
                     let base_address = address | self.base_mask;
-                    for mut i in 0..(2 as u32).pow(self.floating_bits.len() as u32) {
+                    for mut i in 0..2_u32.pow(self.floating_bits.len() as u32) {
                         let mut current_address = base_address;
                         for bit_idx in self.floating_bits.iter() {
                             let is_one = i & 1 == 1;
@@ -166,7 +166,7 @@ mod pt2 {
     pub fn do_pt2(input: &str) {
         let mut program = Program::default();
         input
-            .split("\n")
+            .split('\n')
             .map(Instruction::from_packed)
             .for_each(|i| program.execute_instruction(i));
         println!("{}", program.sum_memory());

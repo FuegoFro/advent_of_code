@@ -29,7 +29,7 @@ fn get_min_max_diff_after_cycles(
     num_cycles: usize,
 ) -> usize {
     for _ in 0..num_cycles {
-        pair_counts = do_insertions(pair_counts, &insertions);
+        pair_counts = do_insertions(pair_counts, insertions);
     }
 
     let mut counts = pair_counts
@@ -48,7 +48,7 @@ fn get_min_max_diff_after_cycles(
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let (raw_start, raw_insertions) = input.split_once("\n\n").unwrap();
 
@@ -62,7 +62,7 @@ pub fn main() {
         .into_count_map();
 
     let insertions = raw_insertions
-        .split("\n")
+        .split('\n')
         .map(|line| line.split_once(" -> ").unwrap())
         .map(|(start_pair_raw, end)| {
             let pair = start_pair_raw
@@ -79,6 +79,6 @@ pub fn main() {
     println!("Part 1: {}", part1);
 
     let part2 =
-        get_min_max_diff_after_cycles(initial_pair_counts.clone(), &insertions, last_char, 40);
+        get_min_max_diff_after_cycles(initial_pair_counts, &insertions, last_char, 40);
     println!("Part 2: {}", part2);
 }

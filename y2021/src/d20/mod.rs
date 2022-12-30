@@ -6,7 +6,7 @@ use util::point2::{Delta, PointS, PointU};
 fn enhance(
     tracked_pixels: HashSet<PointS>,
     tracking_light: bool,
-    replacements: &Vec<bool>,
+    replacements: &[bool],
 ) -> (HashSet<PointS>, bool) {
     let mut enhanced = HashSet::new();
     let enhanced_tracking_light = if replacements[0] {
@@ -22,7 +22,7 @@ fn enhance(
             let replacement_idx = Delta::NEIGHBORS9
                 .iter()
                 .map(|d| tracked_pixels.contains(&(p + d)) == tracking_light)
-                .map(|v| if v { 1 } else { 0 })
+                .map(usize::from)
                 .fold(0, |acc, v| (acc << 1) + v);
             if replacements[replacement_idx] == enhanced_tracking_light {
                 enhanced.insert(p);
@@ -49,7 +49,7 @@ fn print_image(image: &HashSet<PointS>) {
     dbg!(grid);
 }
 
-fn enhance_n(light_pixels: HashSet<PointS>, n: usize, replacements: &Vec<bool>) -> HashSet<PointS> {
+fn enhance_n(light_pixels: HashSet<PointS>, n: usize, replacements: &[bool]) -> HashSet<PointS> {
     assert_eq!(n % 2, 0, "Must enhance an even number of times");
     let mut tracked_pixels = light_pixels;
     let mut tracking_light = true;
@@ -64,7 +64,7 @@ fn enhance_n(light_pixels: HashSet<PointS>, n: usize, replacements: &Vec<bool>) 
 
 pub fn main() {
     // let input = include_str!("example_input.txt").trim().replace("\r", "");
-    let input = include_str!("actual_input.txt").trim().replace("\r", "");
+    let input = include_str!("actual_input.txt").trim().replace('\r', "");
 
     let (replacements_raw, grid_raw) = input.split_once("\n\n").unwrap();
     let replacements = replacements_raw.chars().map(|c| c == '#').collect_vec();
@@ -84,6 +84,6 @@ pub fn main() {
 
     println!(
         "Part 2: {}",
-        enhance_n(light_pixels.clone(), 50, &replacements).len()
+        enhance_n(light_pixels, 50, &replacements).len()
     );
 }

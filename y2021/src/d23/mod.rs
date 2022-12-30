@@ -288,7 +288,7 @@ impl Board {
                 reachable.insert(next_pos, len_so_far);
                 let was_on_double_len = BOARD_DOUBLE_LEN_HOPS.contains(&next_pos);
                 for neighbor in BOARD_NEIGHBORS[&next_pos].iter() {
-                    let move_len = if was_on_double_len && BOARD_DOUBLE_LEN_HOPS.contains(&neighbor)
+                    let move_len = if was_on_double_len && BOARD_DOUBLE_LEN_HOPS.contains(neighbor)
                     {
                         2
                     } else {
@@ -301,14 +301,14 @@ impl Board {
         reachable
     }
 
-    fn estimate_remaining_cost(spots: &Vec<Occupant>) -> u32 {
+    fn estimate_remaining_cost(spots: &[Occupant]) -> u32 {
         let mut estimated_remaining_cost = 0;
         for (pos, occupant) in spots.iter().enumerate() {
             match occupant {
                 Occupant::Empty => continue,
                 Occupant::Pod(pod_type) => {
                     let room = pod_type.target_room();
-                    if Board::room_matches_type_behind(&spots, &room, *pod_type, pos) {
+                    if Board::room_matches_type_behind(spots, &room, *pod_type, pos) {
                         continue;
                     }
                     let estimated_distance =
@@ -337,7 +337,7 @@ impl Board {
     }
 
     fn room_matches_type_behind(
-        spots: &Vec<Occupant>,
+        spots: &[Occupant],
         room: &Room,
         pod_type: PodType,
         pos: usize,
@@ -388,7 +388,7 @@ impl Board {
             };
             println!(
                 "  {:?} {:?} {:?} {:?}{}",
-                self.spots[start + 0],
+                self.spots[start],
                 self.spots[start + 1],
                 self.spots[start + 2],
                 self.spots[start + 3],

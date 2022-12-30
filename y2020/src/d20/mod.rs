@@ -21,7 +21,7 @@ fn bools_to_u16<'a>(i: impl Iterator<Item = &'a bool>) -> u16 {
 
 impl Tile {
     fn from_packed(packed: &str) -> Self {
-        let mut split = packed.split("\n");
+        let mut split = packed.split('\n');
         lazy_static! {
             static ref RE_TILE_ID: Regex = Regex::new(r"^Tile (?P<id>\d+):$").unwrap();
         }

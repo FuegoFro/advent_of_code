@@ -19,7 +19,7 @@ pub fn main() {
         .unwrap();
 
     let majority_value = element_wise_summed.iter().fold(0u32, |accum, bit_count| {
-        let bit_value = if *bit_count > half_lines { 1 } else { 0 };
+        let bit_value = u32::from(*bit_count > half_lines);
         (accum << 1) | bit_value
     });
     let mask = (0u32.not() << element_wise_summed.len()).not();
@@ -32,15 +32,15 @@ pub fn main() {
     println!("Part 2: {}", majority_value * minority_value);
 }
 
-fn narrow_down_numbers(numbers: &Vec<Vec<u32>>, pick_bit: impl Fn(f32, f32) -> bool) -> u32 {
-    let mut numbers = numbers.clone();
+fn narrow_down_numbers(numbers: &[Vec<u32>], pick_bit: impl Fn(f32, f32) -> bool) -> u32 {
+    let mut numbers: Vec<Vec<u32>> = numbers.into();
     for bit_position in 0..numbers[0].len() {
         if numbers.len() == 1 {
             break;
         }
         let num_ones: f32 = numbers.iter().map(|n| n[bit_position] as f32).sum();
         let half = numbers.len() as f32 / 2f32;
-        let expected_bit = if pick_bit(num_ones, half) { 1 } else { 0 };
+        let expected_bit = u32::from(pick_bit(num_ones, half));
         numbers = numbers
             .into_iter()
             .filter(|n| n[bit_position] == expected_bit)
