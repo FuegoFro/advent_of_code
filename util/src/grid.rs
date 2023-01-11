@@ -7,23 +7,12 @@ use itertools::Itertools;
 
 use crate::point2::{Delta, PointS, PointU};
 
-#[derive(Clone)]
+#[derive(Clone, Hash, Eq, PartialEq)]
 pub struct Grid<T> {
     storage: Vec<Vec<T>>,
     height: usize,
     width: usize,
 }
-
-impl<T> PartialEq<Self> for Grid<T>
-where
-    T: Eq,
-{
-    fn eq(&self, other: &Self) -> bool {
-        self.storage.eq(&other.storage)
-    }
-}
-
-impl<T> Eq for Grid<T> where T: Eq {}
 
 pub enum Neighbors {
     Four,

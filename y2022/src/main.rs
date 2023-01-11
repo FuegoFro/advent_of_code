@@ -27,4 +27,5 @@ declare_and_run![
     d21,
     d22,
     d23,
+    d24,
 ];
