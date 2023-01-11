@@ -5,7 +5,7 @@ use std::ops::{Index, IndexMut};
 
 use itertools::Itertools;
 
-use crate::point2::{Delta, PointU};
+use crate::point2::{Delta, PointS, PointU};
 
 #[derive(Clone)]
 pub struct Grid<T> {
@@ -39,6 +39,29 @@ where
             .map(|_| (0..width).map(|_| Default::default()).collect_vec())
             .collect_vec();
         Self::from_storage(storage)
+    }
+}
+
+impl Grid<char> {
+    pub fn from_signed_points<'a>(
+        points: impl Iterator<Item = &'a PointS> + Clone,
+        bounding_box: Option<(PointS, PointS)>,
+    ) -> Self {
+        let (grid_start, grid_end) = if let Some(bb) = bounding_box {
+            bb
+        } else {
+            PointS::get_bounding_box(points.clone())
+        };
+        let size = PointU::ORIGIN + (grid_end - grid_start);
+        let mut grid = Grid::empty(size.x + 1, size.y + 1);
+        for x in grid.iter_mut() {
+            *x = '.';
+        }
+        for point in points {
+            let offset_point = point - grid_start;
+            grid[PointU::ORIGIN + offset_point] = '#';
+        }
+        grid
     }
 }
 

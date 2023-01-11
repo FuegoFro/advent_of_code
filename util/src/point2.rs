@@ -75,6 +75,10 @@ impl Delta {
     pub fn l1_dist(&self) -> i32 {
         self.dx.abs() + self.dy.abs()
     }
+
+    pub fn area(&self) -> i32 {
+        self.dx.abs() * self.dy.abs()
+    }
 }
 
 impl_op_ex!(+|a: &Delta, b: &Delta| -> Delta {
