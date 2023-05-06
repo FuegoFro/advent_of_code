@@ -2,7 +2,8 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashSet};
 use util::grid::{Grid, Neighbors};
 use util::p_u32;
-use util::point2::{Delta, PointU};
+use util::point2::Delta;
+use util::point2::PointU;
 
 // Taken from https://doc.rust-lang.org/std/collections/binary_heap/index.html
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -63,11 +64,11 @@ fn find_cheapest_path_cost(grid: &Grid<u32>) -> u32 {
 
 fn make_expanded_grid(orig_grid: &Grid<u32>) -> Grid<u32> {
     let mut expanded_grid = Grid::empty(orig_grid.width() * 5, orig_grid.height() * 5);
-    for copy_x in 0..5 {
-        for copy_y in 0..5 {
+    for copy_x in 0..5isize {
+        for copy_y in 0..5isize {
             let offset = Delta::new(
-                copy_x * orig_grid.width() as i32,
-                copy_y * orig_grid.height() as i32,
+                copy_x * orig_grid.width() as isize,
+                copy_y * orig_grid.height() as isize,
             );
             let value_change = (copy_x + copy_y) as u32;
             for (p, v) in orig_grid.iter_with_points() {

@@ -1,6 +1,7 @@
 use std::fmt::{Debug, Formatter, Write};
 use util::grid::Grid;
-use util::point2::{Delta, PointU};
+use util::point2::Delta;
+use util::point2::PointU;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 enum Direction {
@@ -9,7 +10,7 @@ enum Direction {
 }
 
 impl Direction {
-    fn delta(&self) -> Delta {
+    fn delta(&self) -> Delta<isize> {
         match self {
             Direction::Right => Delta::RIGHT,
             Direction::Down => Delta::DOWN,

@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use std::fmt::{Debug, Formatter, Write};
 use util::grid::Grid;
-use util::point2::{Delta, PointU};
+use util::point2::{DeltaS, PointU, Rotation};
 
 enum Rotate {
     Right,
@@ -65,15 +65,15 @@ impl Debug for Cell {
     }
 }
 
-fn find_next_available(grid: &Grid<Cell>, current: &PointU, direction: &Delta) -> Option<PointU> {
+fn find_next_available(grid: &Grid<Cell>, current: &PointU, direction: &DeltaS) -> Option<PointU> {
     let width = grid.width() as i32;
     let height = grid.height() as i32;
-    let mut current = current.as_signed();
+    let mut current = current.cast::<i32>().unwrap();
     loop {
         current += direction;
         current.x = current.x.rem_euclid(width);
         current.y = current.y.rem_euclid(height);
-        let current_signed = current.as_unsigned();
+        let current_signed = current.cast().unwrap();
         match grid[current_signed] {
             Cell::Gone => continue,
             Cell::Empty => return Some(current_signed),
@@ -83,12 +83,12 @@ fn find_next_available(grid: &Grid<Cell>, current: &PointU, direction: &Delta) -
     }
 }
 
-fn calculate_password(position: PointU, direction: Delta) -> usize {
+fn calculate_password(position: PointU, direction: DeltaS) -> usize {
     let direction_score = match direction {
-        Delta::RIGHT => 0,
-        Delta::DOWN => 1,
-        Delta::LEFT => 2,
-        Delta::UP => 3,
+        DeltaS::RIGHT => 0,
+        DeltaS::DOWN => 1,
+        DeltaS::LEFT => 2,
+        DeltaS::UP => 3,
         _ => panic!("Invalid direction"),
     };
     1000 * (position.y + 1) + 4 * (position.x + 1) + direction_score
@@ -199,7 +199,7 @@ pub fn main() {
 
     // dbg!(&grid);
 
-    let mut direction = Delta::RIGHT;
+    let mut direction = DeltaS::RIGHT;
     let mut position = grid
         .iter_with_points()
         .filter(|(_, c)| **c == Cell::Empty)
@@ -219,8 +219,8 @@ pub fn main() {
             }
         }
         direction = match rotate {
-            Rotate::Right => direction.rotate_about_origin_deg(90),
-            Rotate::Left => direction.rotate_about_origin_deg(270),
+            Rotate::Right => direction.rotate_about_origin_deg(Rotation::Deg90),
+            Rotate::Left => direction.rotate_about_origin_deg(Rotation::Deg270),
             Rotate::Noop => direction,
         }
     }

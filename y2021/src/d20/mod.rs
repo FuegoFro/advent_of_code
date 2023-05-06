@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::collections::HashSet;
 use util::grid::Grid;
-use util::point2::{Delta, PointS, PointU};
+use util::point2::{DeltaS, PointS, PointU};
 
 fn enhance(
     tracked_pixels: HashSet<PointS>,
@@ -19,7 +19,7 @@ fn enhance(
     for y in min.y - 1..=max.y + 1 {
         for x in min.x - 1..=max.x + 1 {
             let p = PointS::new(x, y);
-            let replacement_idx = Delta::NEIGHBORS9
+            let replacement_idx = DeltaS::NEIGHBORS9
                 .iter()
                 .map(|d| tracked_pixels.contains(&(p + d)) == tracking_light)
                 .map(usize::from)
@@ -43,7 +43,8 @@ fn print_image(image: &HashSet<PointS>) {
     for y in min.y..=max.y {
         for x in min.x..=max.x {
             let p = PointS::new(x, y);
-            grid[PointU::ORIGIN + (p - min)] = if image.contains(&p) { '#' } else { '.' };
+            grid[PointU::ORIGIN + (p - min).cast().unwrap()] =
+                if image.contains(&p) { '#' } else { '.' };
         }
     }
     dbg!(grid);
@@ -74,7 +75,7 @@ pub fn main() {
         // Keep the lit points only
         .filter(|(_, v)| **v)
         // Convert from unsigned to signed
-        .map(|(p, _)| PointS::ORIGIN + (p - PointU::ORIGIN))
+        .map(|(p, _)| PointS::ORIGIN + (p - PointU::ORIGIN).cast().unwrap())
         .collect::<HashSet<_>>();
 
     println!(

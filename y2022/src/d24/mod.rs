@@ -2,7 +2,9 @@ use crate::d24::Cell::Blizzard;
 use priority_queue::PriorityQueue;
 use std::collections::HashSet;
 use util::grid::Grid;
-use util::point2::{Delta, PointU};
+use util::point2::PointU;
+
+type Delta = util::point2::Delta<isize>;
 
 #[derive(Clone, Hash, Eq, PartialEq)]
 struct Directions {
@@ -112,7 +114,7 @@ fn advance(grid: &Grid<Cell>) -> Grid<Cell> {
 }
 
 fn enqueue(frontier: &mut PriorityQueue<State, i32>, state: State, target: &PointU) {
-    let min_remaining = (target - state.position).l1_dist();
+    let min_remaining = (target - state.position).l1_dist() as i32;
     let priority = state.minutes + min_remaining;
     frontier.push(state, -priority);
 }

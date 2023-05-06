@@ -3,7 +3,8 @@ use std::fmt::{Debug, Formatter, Write};
 use tuple::Map;
 use util::grid::Grid;
 use util::p_usize;
-use util::point2::{Delta, PointU};
+use util::point2::Delta;
+use util::point2::PointU;
 
 #[derive(Eq, PartialEq, Clone)]
 enum State {
@@ -30,7 +31,7 @@ impl Debug for State {
 }
 
 const SPAWN: PointU = PointU::new(500, 0);
-const NEXT_POSITION_DELTAS: [Delta; 3] = [Delta::DOWN, Delta::DOWN_LEFT, Delta::DOWN_RIGHT];
+const NEXT_POSITION_DELTAS: [Delta<isize>; 3] = [Delta::DOWN, Delta::DOWN_LEFT, Delta::DOWN_RIGHT];
 
 fn do_single_grain(grid: &mut Grid<State>) -> bool {
     let mut current = SPAWN;
@@ -78,7 +79,7 @@ pub fn main() {
             let count = direction.l1_dist();
             let unit_direction = direction / count;
             for i in 0..=count {
-                grid[a + i * unit_direction] = State::Rock;
+                grid[a + unit_direction * i] = State::Rock;
             }
         }
     }

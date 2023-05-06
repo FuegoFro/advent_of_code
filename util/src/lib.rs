@@ -1,8 +1,9 @@
 #[macro_use]
-extern crate impl_ops;
+extern crate auto_ops;
 
 use itertools::{Itertools, MinMaxResult};
 
+pub mod additional_num_traits;
 pub mod grid;
 pub mod iter_helpers;
 pub mod main_helpers;

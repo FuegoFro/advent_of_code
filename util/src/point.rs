@@ -1,5 +1,4 @@
 use crate::min_max;
-use std::ops;
 
 #[derive(Hash, Eq, PartialEq, Clone, Copy, Debug)]
 pub struct Point {

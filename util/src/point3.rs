@@ -2,7 +2,6 @@ use crate::min_max;
 use itertools::Itertools;
 use std::cmp::{max, min};
 use std::fmt::{Debug, Formatter};
-use std::ops;
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub struct Delta3 {

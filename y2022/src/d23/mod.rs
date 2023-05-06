@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 use util::grid::Grid;
-use util::point2::{Delta, PointS};
+use util::point2::{Delta, PointS, Rotation};
 
-const DIRECTIONS: [Delta; 4] = [Delta::UP, Delta::DOWN, Delta::LEFT, Delta::RIGHT];
+const DIRECTIONS: [Delta<i32>; 4] = [Delta::UP, Delta::DOWN, Delta::LEFT, Delta::RIGHT];
 
 fn do_rounds(points: &mut HashSet<PointS>, max_rounds: Option<usize>) -> usize {
     let mut initial_direction_index = 0;
@@ -29,7 +29,7 @@ fn do_rounds(points: &mut HashSet<PointS>, max_rounds: Option<usize>) -> usize {
                 .skip(initial_direction_index % 4)
                 .take(4)
             {
-                let perpendicular = direction.rotate_about_origin_deg(90);
+                let perpendicular = direction.rotate_about_origin_deg(Rotation::Deg90);
                 let is_clear = [-1, 0, 1].into_iter().all(|multiplier| {
                     let test_point = point + direction + (perpendicular * multiplier);
                     !points.contains(&test_point)
@@ -72,7 +72,7 @@ pub fn main() {
     let points = initial_grid
         .iter_with_points()
         .filter(|(_, has_elf)| **has_elf)
-        .map(|(point, _)| point.as_signed())
+        .map(|(point, _)| point.cast().unwrap())
         .collect::<HashSet<_>>();
     let mut pt1_points = points.clone();
     do_rounds(&mut pt1_points, Some(10));
