@@ -6,7 +6,9 @@ members = [
     "y2020",
     "y2021",
     "y2022",
+    "y2023",
 ]
+resolver = "2"
 
 [profile.release]
 lto = "thin"
