@@ -11,3 +11,5 @@ edition = "2021"
 auto_ops = { git = "https://github.com/FuegoFro/auto_ops.git", rev = "458e54ba6cc525f96f2aa072af5be846b26ecb1e" }
 itertools = "0.10.5"
 num-traits = "0.2"
+serde = "1.0"
+serde_json = "1.0"

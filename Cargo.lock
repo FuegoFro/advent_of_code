@@ -738,6 +738,8 @@ dependencies = [
  "auto_ops",
  "itertools",
  "num-traits",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -896,5 +898,6 @@ dependencies = [
  "recap",
  "regex",
  "serde",
+ "serde_json",
  "util",
 ]

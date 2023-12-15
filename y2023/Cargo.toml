@@ -13,6 +13,7 @@ itertools = "0.10.5"
 recap = "0.1"
 regex = "1"
 serde = "1.0"
+serde_json = "1.0"
 proc-macro2 = "1.0.58" # Indirectly depended on, need to force to more recent version
 
 #derivative = "2.2.0"

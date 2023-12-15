@@ -4,6 +4,7 @@ use std::fmt::{Debug, Formatter, Write};
 use std::ops::{Index, IndexMut};
 
 use itertools::Itertools;
+use serde::de::DeserializeOwned;
 
 use crate::point2::{Delta, Point, PointU, PointValue};
 
@@ -51,6 +52,19 @@ impl Grid<char> {
             grid[PointU::ORIGIN + offset_point.cast()?] = '#';
         }
         Some(grid)
+    }
+}
+
+impl<T> Grid<T>
+where
+    T: DeserializeOwned,
+{
+    pub fn from_serde_chars(raw: impl AsRef<str>) -> Self {
+        Grid::from_str(raw, "\n", None, |s| {
+            let string = format!("\"{}\"", s);
+            serde_json::from_str::<T>(&string)
+                .unwrap_or_else(|_| panic!("Unable to deserialize {}", s))
+        })
     }
 }
 

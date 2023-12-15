@@ -71,6 +71,10 @@ impl<DV: DeltaValue> Delta<DV> {
         self.dx.abs() + self.dy.abs()
     }
 
+    pub fn unit(&self) -> Self {
+        self / self.l1_dist()
+    }
+
     pub fn area(&self) -> DV {
         self.dx.abs() * self.dy.abs()
     }
