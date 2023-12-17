@@ -164,6 +164,34 @@ impl<PV: PointValue> Point<PV> {
             _ => None,
         }
     }
+
+    pub fn step_to(&self, other: &Self) -> impl Iterator<Item = Self> {
+        struct PointIter<PV: PointValue> {
+            next: Point<PV>,
+            delta: Delta<PV::DeltaValueType>,
+            end: Point<PV>,
+        }
+
+        impl<PV: PointValue> Iterator for PointIter<PV> {
+            type Item = Point<PV>;
+
+            fn next(&mut self) -> Option<Self::Item> {
+                if self.next == self.end {
+                    None
+                } else {
+                    let result = Some(self.next);
+                    self.next += self.delta;
+                    result
+                }
+            }
+        }
+
+        PointIter {
+            next: *self,
+            delta: (other - self).unit(),
+            end: *other,
+        }
+    }
 }
 
 enum Op {

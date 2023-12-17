@@ -6,7 +6,7 @@ use std::ops::{Index, IndexMut};
 use itertools::Itertools;
 use serde::de::DeserializeOwned;
 
-use crate::point2::{Delta, Point, PointU, PointValue};
+use crate::point2::{Delta, DeltaU, Point, PointU, PointValue};
 
 #[derive(Clone, Hash, Eq, PartialEq)]
 pub struct Grid<T> {
@@ -167,9 +167,9 @@ impl<T> Grid<T> {
     pub fn get(&self, index: PointU) -> Option<&T> {
         self.storage.get(index.y).and_then(|row| row.get(index.x))
     }
-    
-    pub fn contains(&self, maybe_point: Option<PointU>) -> bool {
-        maybe_point.map(|p| p.x < self.width && p.y < self.height).unwrap_or(false)
+
+    pub fn point_in_grid(&self, point: PointU, delta: &DeltaU) -> Option<PointU> {
+        (point.checked_add(delta)).filter(|p| p.x < self.width && p.y < self.height)
     }
 }
 
