@@ -61,7 +61,7 @@ where
 {
     pub fn from_serde_chars(raw: impl AsRef<str>) -> Self {
         Grid::from_str(raw, "\n", None, |s| {
-            let string = format!("\"{}\"", s);
+            let string = format!("\"{}\"", s.replace('\\', r"\\"));
             serde_json::from_str::<T>(&string)
                 .unwrap_or_else(|_| panic!("Unable to deserialize {}", s))
         })
@@ -166,6 +166,10 @@ impl<T> Grid<T> {
 
     pub fn get(&self, index: PointU) -> Option<&T> {
         self.storage.get(index.y).and_then(|row| row.get(index.x))
+    }
+    
+    pub fn contains(&self, maybe_point: Option<PointU>) -> bool {
+        maybe_point.map(|p| p.x < self.width && p.y < self.height).unwrap_or(false)
     }
 }
 

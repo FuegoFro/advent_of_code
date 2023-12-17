@@ -270,4 +270,5 @@ impl_point_value!(f64; f64);
 // Convenience aliases
 pub type DeltaS = Delta<i32>;
 pub type PointS = Point<i32>;
+pub type DeltaU = Delta<isize>;
 pub type PointU = Point<usize>;
