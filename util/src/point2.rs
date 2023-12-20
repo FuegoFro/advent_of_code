@@ -186,9 +186,16 @@ impl<PV: PointValue> Point<PV> {
             }
         }
 
+        let delta = (other - self).unit();
+        let zero = PV::DeltaValueType::ZERO;
+        let one = PV::DeltaValueType::ONE;
+        assert!(
+            (delta.dx.abs() == one && delta.dy.abs() == zero)
+                || (delta.dx.abs() == zero && delta.dy.abs() == one)
+        );
         PointIter {
             next: *self,
-            delta: (other - self).unit(),
+            delta,
             end: *other,
         }
     }
