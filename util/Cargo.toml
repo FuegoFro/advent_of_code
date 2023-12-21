@@ -7,8 +7,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# TODO - Switch to auto-ops stable once the PR gets merged and released
-auto_ops = { git = "https://github.com/FuegoFro/auto_ops.git", rev = "458e54ba6cc525f96f2aa072af5be846b26ecb1e" }
+# TODO - Switch to auto-ops released version once this commit is released
+auto_ops = { git = "https://github.com/carbotaniuman/auto_ops.git", rev = "7a9192f0a4b3e5ac7911db0cce5aeb74a15ca942" }
 itertools = "0.10.5"
 num-traits = "0.2"
 serde = "1.0"

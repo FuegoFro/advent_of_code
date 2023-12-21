@@ -40,7 +40,7 @@ dependencies = [
 [[package]]
 name = "auto_ops"
 version = "0.3.0"
-source = "git+https://github.com/FuegoFro/auto_ops.git?rev=458e54ba6cc525f96f2aa072af5be846b26ecb1e#458e54ba6cc525f96f2aa072af5be846b26ecb1e"
+source = "git+https://github.com/carbotaniuman/auto_ops.git?rev=7a9192f0a4b3e5ac7911db0cce5aeb74a15ca942#7a9192f0a4b3e5ac7911db0cce5aeb74a15ca942"
 
 [[package]]
 name = "autocfg"

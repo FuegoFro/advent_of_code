@@ -4,6 +4,7 @@ extern crate auto_ops;
 use itertools::{Itertools, MinMaxResult};
 
 pub mod additional_num_traits;
+pub mod cycle_helpers;
 pub mod grid;
 pub mod iter_helpers;
 pub mod main_helpers;
