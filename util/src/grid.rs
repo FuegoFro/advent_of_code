@@ -156,6 +156,14 @@ impl<T> Grid<T> {
         self.storage.iter_mut().flat_map(|row| row.iter_mut())
     }
 
+    pub fn iter_mut_with_points(&mut self) -> impl Iterator<Item = (PointU, &mut T)> {
+        self.storage.iter_mut().enumerate().flat_map(|(y, row)| {
+            row.iter_mut()
+                .enumerate()
+                .map(move |(x, val)| (PointU::new(x, y), val))
+        })
+    }
+
     pub fn iter_with_points(&self) -> impl Iterator<Item = (PointU, &T)> {
         self.storage.iter().enumerate().flat_map(|(y, row)| {
             row.iter()

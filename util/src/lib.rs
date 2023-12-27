@@ -11,6 +11,7 @@ pub mod main_helpers;
 pub mod point;
 pub mod point2;
 pub mod point3;
+mod serde_helpers;
 
 #[allow(dead_code)]
 pub fn p_u32(s: &str) -> u32 {
