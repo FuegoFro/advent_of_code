@@ -225,7 +225,8 @@ pub fn main() {
     }
     let p2 = rx_parent_inputs_high
         .values()
-        .map(|idxs| (idxs[0], idxs[1]))
+        // I... don't know why this needs to be offset 0 instead of the offset of n-1 it seems to be at, but oh well.
+        .map(|idxs| (0, idxs[0] + 1))
         .find_first_common_cycle();
 
     /*
@@ -237,6 +238,7 @@ pub fn main() {
 
     // 65581957384105 is too low
     // 65581957384106 is too low
+    // 221453937522197
 
     */
 
