@@ -170,7 +170,7 @@ impl OctTreeNode {
             .map(|(bound, value)| match value {
                 OctTreeValue::Uniform(on) => {
                     if *on {
-                        bound.volume()
+                        bound.cast::<i64>().unwrap().volume() as u64
                     } else {
                         0
                     }
@@ -185,7 +185,7 @@ impl OctTreeNode {
         for (bound, value) in self.sections() {
             match value {
                 OctTreeValue::Uniform(on) => {
-                    if bound.volume() > 0 {
+                    if bound.cast::<i64>().unwrap().volume() > 0 {
                         println!("{:width$} {} {:?}", "-", on, bound, width = indent * 4);
                     }
                 }
