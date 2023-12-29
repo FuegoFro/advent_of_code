@@ -1,4 +1,3 @@
-#![feature(array_zip)]
 #![feature(array_methods)]
 
 #[macro_use]

@@ -5,6 +5,16 @@ use serde::{de, Deserialize, Deserializer};
 use std::fmt::{Debug, Formatter};
 use util::point3::{BoundingBox, OverlapResult, Point3};
 
+fn array_zip<T, U, const L: usize>(lhs: [T; L], rhs: [U; L]) -> [(T, U); L] {
+    let mut zip_iter = lhs.into_iter().zip(rhs);
+    std::array::from_fn(|_| zip_iter.next().unwrap())
+    // let mut tmp: [Option<(T, U)>; L] = std::array::from_fn(|_| None);
+    // for (i, pair) in lhs.into_iter().zip(rhs.into_iter()).enumerate() {
+    //     tmp[i] = Some(pair);
+    // }
+    // tmp.map(|pair| pair.unwrap())
+}
+
 #[derive(Deserialize, Recap, Debug)]
 // eg "on x=-20..26,y=-36..17,z=-47..7"
 #[recap(
@@ -101,11 +111,11 @@ impl OctTreeNode {
     }
 
     fn sections_mut(&mut self) -> [(BoundingBox, &mut OctTreeValue); 8] {
-        self.bound.octants(&self.mid).zip(self.values.each_mut())
+        array_zip(self.bound.octants(&self.mid), self.values.each_mut())
     }
 
     fn sections(&self) -> [(BoundingBox, &OctTreeValue); 8] {
-        self.bound.octants(&self.mid).zip(self.values.each_ref())
+        array_zip(self.bound.octants(&self.mid), self.values.each_ref())
     }
 
     /// For each node section
@@ -118,7 +128,7 @@ impl OctTreeNode {
         // println!("({}) modification = {:?}", depth, modification);
         // println!("({}) self.bound = {:?}", depth, self.bound);
         // println!("({}) self.mid = {:?}", depth, self.mid);
-        let sections_and_mods = modification.split_at(&self.mid).zip(self.sections_mut());
+        let sections_and_mods = array_zip(modification.split_at(&self.mid), self.sections_mut());
         // println!("({}) sections_and_mods = [", depth);
         // for section in sections_and_mods.iter() {
         //     println!("  {:?},", section);
