@@ -233,7 +233,7 @@ impl<PV: PointValue> BoundingBoxG<PV> {
     }
 
     pub fn is_empty(&self) -> bool {
-        self.start == self.end
+        self.start.x == self.end.x || self.start.y == self.end.y || self.start.z == self.end.z
     }
 
     pub fn corners(&self) -> [Point3G<PV>; 8] {
