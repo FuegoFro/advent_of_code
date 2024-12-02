@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/y2021/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/y2022/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/y2023/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/y2024/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -1,0 +1,12 @@
+[package]
+name = "y2024"
+version = "0.1.0"
+authors = ["Danny Weinberg <FuegoFro@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+util = { path = "../util" }
+
+itertools = "0.10.5"
