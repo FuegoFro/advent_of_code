@@ -8,18 +8,7 @@ use crate::additional_num_traits::{NegOneConst, ZeroOneConst};
 use crate::min_max;
 
 pub trait PointValue:
-    Num
-    + NumCast
-    + ZeroOneConst
-    + NegOneConst
-    + Copy
-    + PartialEq
-    + Eq
-    + PartialOrd
-    + Ord
-    + Debug
-    + Hash
-    + 'static
+    Num + NumCast + ZeroOneConst + NegOneConst + Copy + PartialEq + PartialOrd + Debug + 'static
 {
 }
 
@@ -329,13 +318,13 @@ impl<PV: PointValue> BoundingBoxG<PV> {
     }
 
     pub fn get_best_mid_point(&self, mid_point_options: &Self) -> Point3G<PV> {
-        let points_by_score = mid_point_options
+        mid_point_options
             .corners()
             .into_iter()
             .map(|p| (self.score_mid_point(&p), p))
-            .into_group_map();
-        let max_score = points_by_score.keys().max().unwrap();
-        points_by_score.get(max_score).unwrap()[0]
+            .reduce(|a, b| if a.0 > b.0 { a } else { b })
+            .unwrap()
+            .1
     }
 
     fn score_mid_point(&self, point: &Point3G<PV>) -> PV {
@@ -352,6 +341,8 @@ impl PointValue for i16 {}
 impl PointValue for i32 {}
 impl PointValue for i64 {}
 impl PointValue for i128 {}
+impl PointValue for f32 {}
+impl PointValue for f64 {}
 
 pub type Delta3 = Delta3G<i32>;
 pub type Point3 = Point3G<i32>;

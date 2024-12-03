@@ -10,6 +10,8 @@ edition = "2021"
 util = { path = "../util" }
 
 itertools = "0.10.5"
+levenberg-marquardt = "0.13"
+nalgebra = "0.32"
 recap = "0.1"
 regex = "1"
 serde = "1.0"
