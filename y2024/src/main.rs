@@ -6,4 +6,6 @@ use util::declare_and_run;
 declare_and_run![
     d01,
     d02,
+    d03,
+    d04,
 ];

@@ -10,3 +10,4 @@ edition = "2021"
 util = { path = "../util" }
 
 itertools = "0.10.5"
+regex = "1.11.1"

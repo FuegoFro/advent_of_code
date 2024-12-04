@@ -176,6 +176,10 @@ impl<T> Grid<T> {
         self.storage.get(index.y).and_then(|row| row.get(index.x))
     }
 
+    pub fn get_option(&self, index: Option<PointU>) -> Option<&T> {
+        index.and_then(|index| self.get(index))
+    }
+
     pub fn point_in_grid(&self, point: PointU, delta: &DeltaU) -> Option<PointU> {
         (point.checked_add(delta)).filter(|p| p.x < self.width && p.y < self.height)
     }
